@@ -1,0 +1,38 @@
+cask_args appdir: '/Applications'
+
+tap 'homebrew/cask'
+tap 'homebrew/cask-fonts'
+tap 'pulumi/tap'
+
+brew 'neovim'
+brew 'python'
+brew 'node'
+brew 'mysql-client'
+brew 'pnpm'
+brew 'ripgrep'
+brew 'fd'
+brew 'go'
+brew 'asdf'
+brew 'starship'
+brew 'nushell'
+brew 'jq'
+brew 'zinit'
+brew 'bat'
+brew 'yq'
+brew 'kubernetes-cli'
+brew 'awscli'
+brew 'pulumi'
+brew 'lua'
+brew 'direnv'
+
+cask 'tailscale'
+cask 'google-chrome'
+cask '1password'
+cask 'iterm2'
+cask 'docker'
+cask 'visual-studio-code'
+cask 'rectangle'
+
+mas 'Xcode', id: 497799835
+mas 'Slack', id: 803453959
+mas 'KakakoTalk', id: 869223134
