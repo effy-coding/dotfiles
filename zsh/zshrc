@@ -1,6 +1,18 @@
+export PATH="/opt/homebrew/bin:$PATH"
+
 source $(brew --prefix)/opt/zinit/zinit.zsh
 
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma-continuum/fast-syntax-highlighting
 
+
+export CLICOLOR=1;
+
+precmd () {print -Pn "\e]0;%~\a"}
+
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 alias vim=nvim
+alias k=kubectl
+alias kns=k9s
+
+eval "$(starship init zsh)"

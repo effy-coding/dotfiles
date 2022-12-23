@@ -24,6 +24,10 @@ _run-if cond body:
         {{body}}
     fi
 
+git: (_link 'config/gitconfig' home_dir / '.gitconfig')
+
+starship: (_link 'config/starship.toml' home_dir / '.config/starship.toml')
+
 vim-plug:
     curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -42,3 +46,18 @@ packages-brew:
 [macos]
 zsh: (_link 'zsh/zshrc' home_dir / '.zshrc')
 
+[macos]
+keyboard:
+    defaults write .GlobalPreferences com.apple.mouse.scaling -1
+    defaults write -g ApplePressAndHoldEnabled -bool false
+    defaults write -g InitialKeyRepeat -int 10
+    defaults write -g KeyRepeat -int 1
+
+[macos]
+font:
+    #!/usr/bin/env bash
+    if [ ! -f /Library/Fonts/SF-Mono-Regular.otf ]; then
+        echo "Installing SFMono Fonts"
+        cp /System/Applications/Utilities/Terminal.app/Contents/Resources/Fonts/*.otf /Library/Fonts/
+        echo "Installed SFMono Fonts"
+    fi
