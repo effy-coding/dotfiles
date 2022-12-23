@@ -1,5 +1,3 @@
-echo 'export PATH="/opt/homebrew/bin:$PATH"' >> ~/.zshrc
-
 source $(brew --prefix)/opt/zinit/zinit.zsh
 
 zinit light zsh-users/zsh-autosuggestions
