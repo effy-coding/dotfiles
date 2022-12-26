@@ -3,6 +3,11 @@ export PATH="/opt/homebrew/bin:$PATH"
 source $(brew --prefix)/opt/zinit/zinit.zsh
 . $(brew --prefix asdf)/libexec/asdf.sh
 
+zinit light zsh-users/zsh-completions
+
+autoload compinit
+compinit
+
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma-continuum/fast-syntax-highlighting
 
@@ -16,5 +21,7 @@ alias k=kubectl
 alias kns=k9s
 alias tf=terraform
 alias ls=exa
+
+source <(kubectl completion zsh)
 
 eval "$(starship init zsh)"
