@@ -59,11 +59,3 @@ keyboard:
     defaults write -g InitialKeyRepeat -int 10
     defaults write -g KeyRepeat -int 1
 
-[macos]
-font:
-    #!/usr/bin/env bash
-    if [ ! -f /Library/Fonts/SF-Mono-Regular.otf ]; then
-        echo "Installing SFMono Fonts"
-        cp /System/Applications/Utilities/Terminal.app/Contents/Resources/Fonts/*.otf /Library/Fonts/
-        echo "Installed SFMono Fonts"
-    fi
