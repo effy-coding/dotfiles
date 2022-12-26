@@ -11,6 +11,9 @@ compinit
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma-continuum/fast-syntax-highlighting
 
+unsetopt inc_append_history
+unsetopt share_history
+
 export CLICOLOR=1;
 
 precmd () {print -Pn "\e]0;%~\a"}
