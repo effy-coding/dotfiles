@@ -3,6 +3,8 @@ export PATH="/opt/homebrew/bin:$PATH"
 source $(brew --prefix)/opt/zinit/zinit.zsh
 . $(brew --prefix asdf)/libexec/asdf.sh
 
+bindkey -v
+
 zinit light zsh-users/zsh-completions
 
 autoload compinit

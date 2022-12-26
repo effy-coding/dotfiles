@@ -172,13 +172,12 @@ Plug 'towolf/vim-helm'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'jose-elias-alvarez/typescript.nvim'
 
-" IDE - Terraform
-Plug 'hashivim/vim-terraform'
-
-Plug 'dracula/vim', { 'as': 'dracula' }
+" IDE - Theme
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 
 call plug#end()
 
+colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 
 " Theme
 set background=dark
