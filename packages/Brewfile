@@ -36,7 +36,6 @@ brew 'direnv'
 brew 'k9s'
 
 cask 'tailscale'
-cask 'google-chrome'
 cask '1password'
 cask 'iterm2'
 cask 'docker'
