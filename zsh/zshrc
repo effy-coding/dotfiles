@@ -29,4 +29,6 @@ alias ls=exa
 
 source <(kubectl completion zsh)
 
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
 eval "$(starship init zsh)"
