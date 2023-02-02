@@ -247,9 +247,9 @@ nnoremap <C-l> <C-w>l
 " fzf
 map <C-p> :Files<CR>
 map <C-t> :Buffers<CR>
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.95 } }
 command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, {'options': ['--preview', 'bat --style=numbers --color=always --line-range :200 {}']}, <bang>0)
+    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline']}, <bang>0)
 map <M-w> :Windows<CR>
 
 " NERDTree
