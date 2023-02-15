@@ -117,7 +117,6 @@ Plug 'hrsh7th/nvim-cmp'
 " For vsnip users.
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
-Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 Plug 'onsails/lspkind-nvim'
 Plug 'github/copilot.vim'
 
@@ -388,15 +387,6 @@ EOF
 
 set completeopt=menu,menuone,noselect
 lua <<EOF
-    local tabnine = require('cmp_tabnine.config')
-    tabnine:setup({
-            max_lines = 1000;
-            max_num_results = 20;
-            sort = true;
-        run_on_every_keystroke = true;
-        snippet_placeholder = '..';
-    })
-
     local lspkind = require('lspkind')
 
     -- Setup nvim-cmp.
@@ -435,7 +425,6 @@ lua <<EOF
         },
         { 
             { name = 'vsnip' }, -- For vsnip users.
-            { name = 'cmp_tabnine' },
         },
         {
             { name = 'buffer' },
