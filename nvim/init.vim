@@ -106,6 +106,10 @@ Plug 'mfussenegger/nvim-dap'
 Plug 'mfussenegger/nvim-dap-python'
 Plug 'rcarriga/nvim-dap-ui'
 
+" IDE - Search and Replace
+Plug 'nvim-lua/plenary.nvim'
+Plug 'windwp/nvim-spectre'
+
 " IDE - LSP
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
