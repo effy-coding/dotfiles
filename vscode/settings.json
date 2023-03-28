@@ -1,0 +1,47 @@
+{
+  "workbench.colorTheme": "GitHub Dark",
+  "workbench.startupEditor": "newUntitledFile",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "workbench.colorCustomizations": {
+    "editorCursor.foreground": "#1fff9a",
+    "terminalCursor.foreground": "#1fff9a",
+
+    "editor.selectionBackground": "#858585ab",
+    "editor.selectionHighlightBackground": "#6169bded",
+    "editor.selectionForeground": "#fcfa74",
+
+    "editorIndentGuide.activeBackground": "#1fff9a",
+    "editorIndentGuide.background": "#858585ab",
+
+    "editorLineNumber.activeForeground": "#1fff9a",
+    "editorLineNumber.foreground": "#858585ab",
+
+    "activityBar.background": "#000000",
+    "panel.border": "#ffffff95",
+    "editorGroup.border": "#6169bded",
+    "tab.activeBorderTop": "#ff000000",
+    "contrastActiveBorder": "#ffffff",
+
+    "editor.findMatchBackground": "#ffffff",
+    "editor.findMatchHighlightBackground": "#ffffff84"
+  },
+  "editor.tokenColorCustomizations": {
+    "comments": "#fcfa74"
+  },
+  "workbench.iconTheme": "material-icon-theme",
+  "explorer.confirmDelete": false,
+  "redhat.telemetry.enabled": false,
+  "explorer.confirmDragAndDrop": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.minimap.enabled": false,
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.formatOnSave": true
+  },
+  "files.associations": {
+    "*.tfvars": "terraform"
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "window.zoomLevel": 1,
+  "editor.formatOnSave": true
+}
