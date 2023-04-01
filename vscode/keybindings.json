@@ -1,12 +1,11 @@
 // Place your key bindings in this file to override the defaults
 [
   {
-    "key": "ctrl+`",
-    "command": "workbench.action.closePanel"
+    "key": "cmd+'",
+    "command": "workbench.action.splitEditor"
   },
   {
-    "key": "ctrl+`",
-    "command": "workbench.action.toggleMaximizedPanel",
-    "when": "!terminalFocus"
+    "key": "cmd+\\",
+    "command": "-workbench.action.splitEditor"
   }
 ]
