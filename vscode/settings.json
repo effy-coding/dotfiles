@@ -1,5 +1,9 @@
 {
-  "workbench.colorTheme": "GitHub Dark High Contrast",
+  "[svelte]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "workbench.colorTheme": "modulestf-hc",
   "workbench.startupEditor": "newUntitledFile",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "workbench.colorCustomizations": {
@@ -18,8 +22,9 @@
 
     "activityBar.background": "#000000",
     "panel.border": "#ffffff95",
-    "editorGroup.border": "#6169bded",
+    "editorGroup.border": "#ff00ff",
     "tab.activeBorderTop": "#ff000000",
+    "scrollbarSlider.background": "#ffffff3c",
     "contrastActiveBorder": "#ffffff",
 
     "editor.findMatchBackground": "#ffffff",
@@ -42,6 +47,7 @@
     "*.tfvars": "terraform"
   },
   "diffEditor.ignoreTrimWhitespace": false,
-  "window.zoomLevel": 1,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "svelte.enable-ts-plugin": true,
+  "editor.inlineSuggest.enabled": true
 }
