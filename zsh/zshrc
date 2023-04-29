@@ -38,6 +38,7 @@ alias kns=k9s
 alias tf=terraform
 alias ls=exa
 alias p=pnpm
+alias n=npm
 
 source <(kubectl completion zsh)
 
