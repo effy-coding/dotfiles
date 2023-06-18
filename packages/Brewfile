@@ -7,6 +7,7 @@ tap 'redpanda-data/tap/redpanda'
 
 brew 'argocd'
 brew 'neovim'
+brew 'kind'
 brew 'kustomize'
 brew 'helm'
 brew 'eksctl'
