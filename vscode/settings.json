@@ -5,29 +5,40 @@
   },
   "workbench.colorTheme": "modulestf-hc",
   "workbench.startupEditor": "newUntitledFile",
+  "workbench.activityBar.visible": false,
+  "workbench.statusBar.visible": false,
+  "workbench.layoutControl.enabled": false,
+  "editor.glyphMargin": false,
+  "editor.guides.highlightActiveIndentation": false,
+  "editor.guides.indentation": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "workbench.colorCustomizations": {
+    "tree.indentGuidesStroke": "#1fff9a",
     "editorCursor.foreground": "#1fff9a",
     "terminalCursor.foreground": "#1fff9a",
-
     "editor.selectionBackground": "#858585ab",
     "editor.selectionHighlightBackground": "#6169bded",
-    "editor.selectionForeground": "#fcfa74",
+    "editor.selectionForeground": "#000000",
 
-    "editorIndentGuide.activeBackground": "#1fff9a",
-    "editorIndentGuide.background": "#858585ab",
+    "editorIndentGuide.activeBackground1": "#1fff9a",
+    "editorIndentGuide.background1": "#858585ab",
 
     "editorLineNumber.activeForeground": "#1fff9a",
     "editorLineNumber.foreground": "#858585ab",
-
+    "titleBar.border": "#000000",
     "activityBar.background": "#000000",
     "panel.border": "#ffffff95",
-    "editorGroup.border": "#ff00ff",
+    "editorGroup.border": "#1fff9a",
     "tab.activeBorderTop": "#ff000000",
     "scrollbarSlider.background": "#ffffff3c",
+    "focusBorder": "#1fff9a",
+    "tab.border": "#ffffff95",
+    "sideBar.border": "#000000",
+    "sideBarSectionHeader.border": "#ffffff95",
     "contrastActiveBorder": "#ffffff",
-
-    "editor.findMatchBackground": "#ffffff",
+    "editorGroupHeader.border": "#ffffff84",
+    "editorGroupHeader.tabsBorder": "#ffffff84",
+    "editor.findMatchBackground": "#1fff9a",
     "editor.findMatchHighlightBackground": "#ffffff84"
   },
   "editor.tokenColorCustomizations": {
@@ -35,19 +46,18 @@
   },
   "workbench.iconTheme": "material-icon-theme",
   "explorer.confirmDelete": false,
-  "redhat.telemetry.enabled": false,
   "explorer.confirmDragAndDrop": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.minimap.enabled": false,
   "[terraform]": {
-    "editor.defaultFormatter": "hashicorp.terraform",
     "editor.formatOnSave": true
   },
   "files.associations": {
     "*.tfvars": "terraform"
   },
-  "diffEditor.ignoreTrimWhitespace": false,
   "editor.formatOnSave": true,
   "svelte.enable-ts-plugin": true,
-  "editor.inlineSuggest.enabled": true
+  "editor.inlineSuggest.enabled": true,
+  "security.workspace.trust.untrustedFiles": "open",
+  "window.zoomLevel": 1
 }
