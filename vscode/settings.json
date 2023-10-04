@@ -3,11 +3,16 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "svelte.svelte-vscode"
   },
+  "[rust]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
   "workbench.colorTheme": "modulestf-hc",
   "workbench.startupEditor": "newUntitledFile",
   "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": false,
   "workbench.layoutControl.enabled": false,
+  "breadcrumbs.enabled": false,
   "editor.glyphMargin": false,
   "editor.guides.highlightActiveIndentation": false,
   "editor.guides.indentation": true,
@@ -19,6 +24,9 @@
     "editor.selectionBackground": "#858585ab",
     "editor.selectionHighlightBackground": "#6169bded",
     "editor.selectionForeground": "#000000",
+
+    "editor.lineHighlightBorder": "#000000",
+    "editor.lineHighlightBackground": "#ffffff36",
 
     "editorIndentGuide.activeBackground1": "#1fff9a",
     "editorIndentGuide.background1": "#858585ab",
@@ -36,8 +44,14 @@
     "sideBar.border": "#000000",
     "sideBarSectionHeader.border": "#ffffff95",
     "contrastActiveBorder": "#ffffff",
-    "editorGroupHeader.border": "#ffffff84",
-    "editorGroupHeader.tabsBorder": "#ffffff84",
+    "editorWidget.border": "#ffffff84",
+
+    "editorWidget.background": "#000000",
+
+    "commandCenter.border": "#000000",
+
+    "editorGroupHeader.border": "#000000",
+    "editorGroupHeader.tabsBorder": "#000000",
     "editor.findMatchBackground": "#1fff9a",
     "editor.findMatchHighlightBackground": "#ffffff84"
   },
@@ -59,5 +73,5 @@
   "svelte.enable-ts-plugin": true,
   "editor.inlineSuggest.enabled": true,
   "security.workspace.trust.untrustedFiles": "open",
-  "window.zoomLevel": 1
+  "window.zoomLevel": 3
 }
