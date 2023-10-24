@@ -7,5 +7,9 @@
   {
     "key": "cmd+\\",
     "command": "-workbench.action.splitEditor"
+  },
+  {
+    "key": "cmd+;",
+    "command": "editor.action.goToTypeDefinition"
   }
 ]
