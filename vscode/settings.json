@@ -1,4 +1,5 @@
 {
+  "dart.sdkPath": "/opt/homebrew/bin/flutter",
   "[svelte]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "svelte.svelte-vscode"
@@ -7,17 +8,19 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "rust-lang.rust-analyzer"
   },
+  "editor.tabSize": 2,
   "workbench.colorTheme": "modulestf-hc",
   "workbench.startupEditor": "newUntitledFile",
-  "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": false,
   "workbench.layoutControl.enabled": false,
   "breadcrumbs.enabled": false,
-  "editor.glyphMargin": false,
+  "editor.glyphMargin": true,
   "editor.guides.highlightActiveIndentation": false,
   "editor.guides.indentation": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
+  "dart.flutterHotReloadOnSave": "all",
   "workbench.colorCustomizations": {
+    "dart.closingLabels": "#858585ab",
     "tree.indentGuidesStroke": "#1fff9a",
     "editorCursor.foreground": "#1fff9a",
     "terminalCursor.foreground": "#1fff9a",
@@ -26,8 +29,7 @@
     "editor.selectionForeground": "#000000",
 
     "editor.lineHighlightBorder": "#000000",
-    "editor.lineHighlightBackground": "#ffffff36",
-
+    "editor.lineHighlightBackground": "#ffffff15",
     "editorIndentGuide.activeBackground1": "#1fff9a",
     "editorIndentGuide.background1": "#858585ab",
 
@@ -73,5 +75,11 @@
   "svelte.enable-ts-plugin": true,
   "editor.inlineSuggest.enabled": true,
   "security.workspace.trust.untrustedFiles": "open",
-  "window.zoomLevel": 1
+  "window.zoomLevel": 1,
+  "workbench.activityBar.location": "hidden",
+  "go.toolsManagement.autoUpdate": true,
+  "dart.flutterSdkPath": "/Users/effy.yaml/workspace/flutter",
+  "dart.openDevTools": "flutter",
+  "dart.cliConsole": "terminal",
+  "diffEditor.ignoreTrimWhitespace": false
 }
