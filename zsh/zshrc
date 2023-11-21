@@ -43,6 +43,8 @@ alias n=npm
 source <(kubectl completion zsh)
 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="$PATH:/Users/effy.yaml/workspace/flutter/bin"
+export PATH="$PATH:~/Library/Android/sdk/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools"
 
 eval "$(starship init zsh)"
 
