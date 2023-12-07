@@ -4,6 +4,7 @@ tap 'homebrew/cask'
 tap 'homebrew/cask-fonts'
 tap 'pulumi/tap'
 
+brew 'ec2-spot-interrupter'
 brew 'redpanda-data/tap/redpanda'
 brew 'supabase/tap/supabase'
 brew 'cloudflare/cloudflare/cloudflared'
