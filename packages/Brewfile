@@ -48,6 +48,7 @@ brew 'commitizen'
 brew 'lua'
 brew 'direnv'
 brew 'k9s'
+brew '1password-cli'
 
 cask 'tailscale'
 cask '1password'
