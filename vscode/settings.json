@@ -20,6 +20,7 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "dart.flutterHotReloadOnSave": "all",
   "workbench.colorCustomizations": {
+    "editorHoverWidget.background": "#0000007c",
     "dart.closingLabels": "#858585ab",
     "tree.indentGuidesStroke": "#1fff9a",
     "editorCursor.foreground": "#1fff9a",
