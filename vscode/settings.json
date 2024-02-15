@@ -11,7 +11,6 @@
   "editor.tabSize": 2,
   "workbench.colorTheme": "modulestf-hc",
   "workbench.startupEditor": "newUntitledFile",
-  "workbench.statusBar.visible": false,
   "workbench.layoutControl.enabled": false,
   "breadcrumbs.enabled": false,
   "editor.glyphMargin": true,
@@ -20,7 +19,12 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "dart.flutterHotReloadOnSave": "all",
   "workbench.colorCustomizations": {
-    "editorHoverWidget.background": "#0000007c",
+    "editorHoverWidget.background": "#00000000",
+    "editorHoverWidget.foreground": "#ffffff9e",
+    "editorHoverWidget.statusBarBackground": "#00000000",
+    "editorHoverWidget.highlightForeground": "#00000000",
+    "editor.hoverHighlightBackground": "#00000000",
+    "editorHoverWidget.border": "#00000000",
     "dart.closingLabels": "#858585ab",
     "tree.indentGuidesStroke": "#1fff9a",
     "editorCursor.foreground": "#1fff9a",
@@ -76,11 +80,17 @@
   "svelte.enable-ts-plugin": true,
   "editor.inlineSuggest.enabled": true,
   "security.workspace.trust.untrustedFiles": "open",
-  "window.zoomLevel": 1,
   "workbench.activityBar.location": "hidden",
   "go.toolsManagement.autoUpdate": true,
   "dart.flutterSdkPath": "/Users/effy.yaml/workspace/flutter",
   "dart.openDevTools": "flutter",
   "dart.cliConsole": "terminal",
-  "diffEditor.ignoreTrimWhitespace": false
+  "diffEditor.ignoreTrimWhitespace": false,
+  "window.zoomLevel": 1,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  }
 }
