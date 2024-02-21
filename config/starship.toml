@@ -10,13 +10,6 @@ $git_status\
 $cmd_duration\
 $character"""
 
-right_format = """
-$nodejs\
-$python\
-$aws\
-$time
-"""
-
 [character]
 error_symbol = "[✘](bold #ff9580)"
 success_symbol = "[❯](bold #8aff80)"
