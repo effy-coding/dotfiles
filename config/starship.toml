@@ -80,7 +80,7 @@ symbol = " "
 symbol = " "
 
 [git_branch]
-symbol = " "
+symbol = "+ "
 format = "[$symbol$branch(:$remote_branch)]($style) "
 style = "bold #80ffea"
 
