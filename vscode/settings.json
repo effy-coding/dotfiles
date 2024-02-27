@@ -29,9 +29,7 @@
     "tree.indentGuidesStroke": "#1fff9a",
     "editorCursor.foreground": "#1fff9a",
     "terminalCursor.foreground": "#1fff9a",
-    "editor.selectionBackground": "#858585ab",
-    "editor.selectionHighlightBackground": "#6169bded",
-    "editor.selectionForeground": "#000000",
+    "editor.selectionBackground": "#ffffff",
 
     "editor.lineHighlightBorder": "#000000",
     "editor.lineHighlightBackground": "#ffffff15",
@@ -59,8 +57,8 @@
 
     "editorGroupHeader.border": "#000000",
     "editorGroupHeader.tabsBorder": "#000000",
-    "editor.findMatchBackground": "#1fff9a",
-    "editor.findMatchHighlightBackground": "#ffffff84"
+    "editor.findMatchHighlightBorder": "#1fff9a",
+    "editor.findMatchBackground": "#ffffff"
   },
   "editor.tokenColorCustomizations": {
     "comments": "#fcfa74"
