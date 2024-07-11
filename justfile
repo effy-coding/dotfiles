@@ -60,3 +60,9 @@ keyboard:
     defaults write -g InitialKeyRepeat -int 10
     defaults write -g KeyRepeat -int 1
 
+vscode-keybindings: (_link 'vscode/keybindings.json' home_dir / 'Library/Application\ Support/Code/User/keybindings.json')
+vscode-settings: (_link 'vscode/settings.json' home_dir / 'Library/Application\ Support/Code/User/settings.json')
+
+[macos]
+vscode: vscode-keybindings vscode-settings
+    
