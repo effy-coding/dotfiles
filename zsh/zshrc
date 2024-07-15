@@ -39,6 +39,7 @@ alias tf=terraform
 alias ls=eza
 alias p=pnpm
 alias n=npm
+alias sb=supabase
 
 source <(kubectl completion zsh)
 
@@ -52,3 +53,6 @@ eval "$(starship init zsh)"
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH=$PATH:$HOME/.maestro/bin
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+eval "$(~/.local/bin/mise activate zsh)"

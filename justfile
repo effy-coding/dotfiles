@@ -36,6 +36,9 @@ nvim: vim-plug _config-dir && (_link 'nvim' home_dir / '.config/nvim')
     nvim -c "PlugInstall" -c "UpdateRemotePlugins" -c "qa"
     nvim -c "TSInstall vim python lua rust typescript javascript" -c "qa"
 
+mise:
+    curl https://mise.run | sh
+
 asdf:
     asdf plugin-add python
     asdf plugin-add terraform https://github.com/asdf-community/asdf-hashicorp.git
