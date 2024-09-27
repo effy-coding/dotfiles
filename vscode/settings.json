@@ -9,9 +9,7 @@
     "editor.defaultFormatter": "rust-lang.rust-analyzer"
   },
   "editor.tabSize": 2,
-  "workbench.colorTheme": "modulestf-hc",
   "workbench.startupEditor": "newUntitledFile",
-  "workbench.layoutControl.enabled": false,
   "breadcrumbs.enabled": false,
   "editor.glyphMargin": true,
   "editor.guides.highlightActiveIndentation": false,
@@ -19,8 +17,8 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "dart.flutterHotReloadOnSave": "all",
   "workbench.colorCustomizations": {
-    "editorHoverWidget.background": "#00000000",
-    "editorHoverWidget.foreground": "#ffffff9e",
+    "editorHoverWidget.background": "#000000da",
+    "editorHoverWidget.foreground": "#ffffff",
     "editorHoverWidget.statusBarBackground": "#00000000",
     "editorHoverWidget.highlightForeground": "#00000000",
     "editor.hoverHighlightBackground": "#00000000",
@@ -30,12 +28,10 @@
     "editorCursor.foreground": "#1fff9a",
     "terminalCursor.foreground": "#1fff9a",
     "editor.selectionBackground": "#ffffff",
-
     "editor.lineHighlightBorder": "#000000",
     "editor.lineHighlightBackground": "#ffffff15",
     "editorIndentGuide.activeBackground1": "#1fff9a",
     "editorIndentGuide.background1": "#858585ab",
-
     "editorLineNumber.activeForeground": "#1fff9a",
     "editorLineNumber.foreground": "#858585ab",
     "titleBar.border": "#000000",
@@ -50,11 +46,8 @@
     "sideBarSectionHeader.border": "#ffffff95",
     "contrastActiveBorder": "#ffffff",
     "editorWidget.border": "#ffffff84",
-
     "editorWidget.background": "#000000",
-
     "commandCenter.border": "#000000",
-
     "editorGroupHeader.border": "#000000",
     "editorGroupHeader.tabsBorder": "#000000",
     "editor.findMatchHighlightBorder": "#1fff9a",
@@ -63,7 +56,6 @@
   "editor.tokenColorCustomizations": {
     "comments": "#fcfa74"
   },
-  "workbench.iconTheme": "material-icon-theme",
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -90,5 +82,7 @@
     "plaintext": false,
     "markdown": false,
     "scminput": false
-  }
+  },
+  "workbench.colorTheme": "modulestf-hc",
+  "workbench.iconTheme": "material-icon-theme"
 }
