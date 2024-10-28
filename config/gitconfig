@@ -1,9 +1,17 @@
 [user]
-	name = effy-coding
-	email = dangen.effy@gmail.com
+	name = effy.yaml
+	email = effy.yaml@toss.im
 
 [core]
-    editor = nvim
+	editor = nvim
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+	side-by-side = true
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
 
 [merge]
   tool = vimdiff
@@ -30,3 +38,5 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[credential]
+	helper = store
