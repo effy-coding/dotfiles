@@ -7,8 +7,8 @@ source $(brew --prefix)/opt/zinit/zinit.zsh
 
 zinit load zdharma-continuum/history-search-multi-word
 
-autoload compinit
-compinit
+# autoload compinit
+# compinit
 
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 fpath=(/usr/local/share/zsh-completions $fpath)
@@ -40,8 +40,8 @@ alias ls=eza
 alias p=pnpm
 alias n=npm
 alias sb=supabase
+alias b=bun
 
-source <(kubectl completion zsh)
 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="$PATH:/Users/effy.yaml/workspace/flutter/bin"
@@ -55,7 +55,6 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH=$PATH:$HOME/.maestro/bin
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-eval "$(~/.local/bin/mise activate zsh)"
 
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
@@ -73,4 +72,28 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 autoload bashcompinit
 bashcompinit
-eval "$(register-python-argcomplete airflow)"
+
+. "$HOME/.local/bin/env"
+eval "$(~/.local/bin/mise activate zsh)"
+
+# bun completions
+[ -s "/Users/kimb/.bun/_bun" ] && source "/Users/kimb/.bun/_bun"
+export LESS=FRX
+
+export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
+
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export GOOGLE_CLOUD_PROJECT="watnee"
+
+# Added by Antigravity
+export PATH="/Users/kimb/.antigravity/antigravity/bin:$PATH"
+export PATH="/opt/homebrew/opt/node@24/bin:$PATH"
+
+# opencode
+export PATH=/Users/kimb/.opencode/bin:$PATH
+
+eval "$(zellij setup --generate-auto-start zsh)"
