@@ -23,7 +23,7 @@ truncation_length = 0
 # ------------------------------------------------------------------------------
 [git_branch]
 symbol = ""
-style = "bold magenta"
+style = "dimmed white"
 format = "[$symbol $branch]($style)"
 
 [git_status]
