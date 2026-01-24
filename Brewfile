@@ -23,8 +23,6 @@ brew "neovim"
 
 # Session Manager
 brew "tmux"
-tap "asheshgoplani/tap"
-brew "asheshgoplani/tap/agent-deck"
 
 # Version Manager
 brew "mise"

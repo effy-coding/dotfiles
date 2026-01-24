@@ -143,23 +143,14 @@ if command -v bun &> /dev/null; then
 fi
 
 # ------------------------------------------------------------------------------
-# 9. Setup agent-deck
-# ------------------------------------------------------------------------------
-echo "==> Setting up agent-deck..."
-create_symlink "$DOTFILES_DIR/agent-deck/config.toml" "$HOME/.agent-deck/config.toml"
-
-# Create workspaces directories
-mkdir -p "$HOME/workspaces/experiments"
-
-# ------------------------------------------------------------------------------
-# 10. Install custom scripts
+# 9. Install custom scripts
 # ------------------------------------------------------------------------------
 echo "==> Installing custom scripts..."
 mkdir -p "$HOME/.local/bin"
 create_symlink "$DOTFILES_DIR/scripts/dev" "$HOME/.local/bin/dev"
 
 # ------------------------------------------------------------------------------
-# 11. Apply macOS settings
+# 10. Apply macOS settings
 # ------------------------------------------------------------------------------
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "==> Applying macOS settings..."
