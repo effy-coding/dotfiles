@@ -1,0 +1,122 @@
+# ==============================================================================
+# Starship Prompt Configuration - Dracula Theme
+# ==============================================================================
+
+format = """
+[](#bd93f9)\
+$os\
+$username\
+[](bg:#ff79c6 fg:#bd93f9)\
+$directory\
+[](fg:#ff79c6 bg:#ffb86c)\
+$git_branch\
+$git_status\
+[](fg:#ffb86c bg:#50fa7b)\
+$nodejs\
+$python\
+$rust\
+$golang\
+[](fg:#50fa7b bg:#6272a4)\
+$docker_context\
+[](fg:#6272a4 bg:#282a36)\
+$time\
+[ ](fg:#282a36)\
+\n$character"""
+
+# Disable the blank line at the start of the prompt
+add_newline = true
+
+# ------------------------------------------------------------------------------
+# OS
+# ------------------------------------------------------------------------------
+[os]
+disabled = false
+style = "bg:#bd93f9 fg:#282a36"
+
+[os.symbols]
+Macos = " "
+
+# ------------------------------------------------------------------------------
+# Username
+# ------------------------------------------------------------------------------
+[username]
+show_always = false
+style_user = "bg:#bd93f9 fg:#282a36"
+style_root = "bg:#bd93f9 fg:#282a36"
+format = '[$user ]($style)'
+disabled = true
+
+# ------------------------------------------------------------------------------
+# Directory
+# ------------------------------------------------------------------------------
+[directory]
+style = "bg:#ff79c6 fg:#282a36"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = ".../"
+
+[directory.substitutions]
+"Documents" = " "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+"Developer" = " "
+
+# ------------------------------------------------------------------------------
+# Git
+# ------------------------------------------------------------------------------
+[git_branch]
+symbol = ""
+style = "bg:#ffb86c fg:#282a36"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:#ffb86c fg:#282a36"
+format = '[$all_status$ahead_behind ]($style)'
+
+# ------------------------------------------------------------------------------
+# Languages
+# ------------------------------------------------------------------------------
+[nodejs]
+symbol = ""
+style = "bg:#50fa7b fg:#282a36"
+format = '[ $symbol ($version) ]($style)'
+
+[python]
+symbol = ""
+style = "bg:#50fa7b fg:#282a36"
+format = '[ $symbol ($version) ]($style)'
+
+[rust]
+symbol = ""
+style = "bg:#50fa7b fg:#282a36"
+format = '[ $symbol ($version) ]($style)'
+
+[golang]
+symbol = ""
+style = "bg:#50fa7b fg:#282a36"
+format = '[ $symbol ($version) ]($style)'
+
+# ------------------------------------------------------------------------------
+# Docker
+# ------------------------------------------------------------------------------
+[docker_context]
+symbol = ""
+style = "bg:#6272a4 fg:#f8f8f2"
+format = '[ $symbol $context ]($style)'
+
+# ------------------------------------------------------------------------------
+# Time
+# ------------------------------------------------------------------------------
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "bg:#282a36 fg:#f8f8f2"
+format = '[ $time ]($style)'
+
+# ------------------------------------------------------------------------------
+# Character (prompt indicator)
+# ------------------------------------------------------------------------------
+[character]
+success_symbol = "[❯](bold #50fa7b)"
+error_symbol = "[❯](bold #ff5555)"

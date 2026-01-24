@@ -1,0 +1,43 @@
+# ==============================================================================
+# Agent Deck Configuration
+# ==============================================================================
+
+# Default AI tool when creating new sessions
+default_tool = "opencode"
+
+# ------------------------------------------------------------------------------
+# Experiments (quick project creation)
+# ------------------------------------------------------------------------------
+[experiments]
+directory = "~/workspaces/experiments"
+date_prefix = true
+default_tool = "opencode"
+
+# ------------------------------------------------------------------------------
+# Notifications
+# ------------------------------------------------------------------------------
+[notifications]
+enabled = true
+max_shown = 6
+
+# ------------------------------------------------------------------------------
+# Updates
+# ------------------------------------------------------------------------------
+[updates]
+check_enabled = true
+check_interval_hours = 24
+notify_in_cli = true
+
+# ------------------------------------------------------------------------------
+# MCP Servers (optional - for Claude Code users)
+# ------------------------------------------------------------------------------
+# [mcps.memory]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-memory"]
+# description = "Persistent memory via knowledge graph"
+
+# [mcps.github]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-github"]
+# env = { GITHUB_PERSONAL_ACCESS_TOKEN = "your-token" }
+# description = "GitHub repos, issues, PRs"

@@ -1,0 +1,12 @@
+# ==============================================================================
+# mise Global Configuration
+# ==============================================================================
+# This file defines global tool versions managed by mise.
+# Project-specific versions can override these in local .mise.toml files.
+
+[tools]
+node = "lts"
+bun = "latest"
+
+[settings]
+experimental = true

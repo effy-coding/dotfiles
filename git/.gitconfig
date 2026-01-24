@@ -1,0 +1,31 @@
+[user]
+	name = nobody
+	email = nobody@gmail.com
+
+[alias]
+	s = status
+
+[core]
+	pager = delta
+	editor = nvim
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = false
+
+[delta]
+	navigate = true
+	line-numbers = true
+	side-by-side = true
+	syntax-theme = Dracula
+
+[interactive]
+	diffFilter = delta --color-only
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default

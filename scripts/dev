@@ -1,0 +1,193 @@
+#!/bin/bash
+
+# ==============================================================================
+# dev - Development session starter with tmux + git worktree
+# ==============================================================================
+# Usage:
+#   dev                     # Start session in current directory
+#   dev <name>              # Create worktree + session
+#   dev -l                  # List active sessions
+#   dev -c <name>           # Clean up session (tmux + worktree + branch)
+# ==============================================================================
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Defaults
+SESSION_NAME=""
+LIST_MODE=false
+CLEAN_MODE=false
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -l|--list)
+            LIST_MODE=true
+            shift
+            ;;
+        -c|--clean)
+            CLEAN_MODE=true
+            shift
+            ;;
+        -h|--help)
+            echo "Usage: dev [options] [name]"
+            echo ""
+            echo "Options:"
+            echo "  -l, --list              List active sessions"
+            echo "  -c, --clean <name>      Clean up session (tmux + worktree + branch)"
+            echo "  -h, --help              Show this help"
+            echo ""
+            echo "Examples:"
+            echo "  dev                     # Start session in current directory"
+            echo "  dev s1                  # Create worktree + session"
+            echo "  dev -l                  # List all sessions"
+            echo "  dev -c s1               # Clean up session"
+            exit 0
+            ;;
+        -*)
+            echo -e "${RED}Unknown option: $1${NC}"
+            exit 1
+            ;;
+        *)
+            SESSION_NAME="$1"
+            shift
+            ;;
+    esac
+done
+
+# List mode
+if [[ "$LIST_MODE" == true ]]; then
+    tmux list-sessions 2>/dev/null | grep "^dev_" || echo "No dev sessions running"
+    exit 0
+fi
+
+# Clean mode
+if [[ "$CLEAN_MODE" == true ]]; then
+    if [[ -z "$SESSION_NAME" ]]; then
+        echo -e "${RED}Error: Specify session name. Usage: dev -c <name>${NC}"
+        exit 1
+    fi
+    
+    REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+    SANITIZED_NAME=$(echo "$SESSION_NAME" | tr ' ./' '_')
+    
+    echo -e "${YELLOW}Cleaning up: $SESSION_NAME${NC}"
+    
+    # 1. Stop tmux session
+    if tmux has-session -t "dev_$SANITIZED_NAME" 2>/dev/null; then
+        echo -e "${BLUE}Stopping tmux session...${NC}"
+        tmux kill-session -t "dev_$SANITIZED_NAME"
+    fi
+    
+    # 2. Remove worktree and branch
+    if [[ -n "$REPO_ROOT" ]]; then
+        REPO_NAME=$(basename "$REPO_ROOT")
+        WORKTREE_DIR="$REPO_ROOT/../.worktrees/$REPO_NAME/$SESSION_NAME"
+        
+        if [[ -d "$WORKTREE_DIR" ]]; then
+            echo -e "${BLUE}Removing worktree...${NC}"
+            git -C "$REPO_ROOT" worktree remove "$WORKTREE_DIR" --force 2>/dev/null || true
+        fi
+        
+        if git -C "$REPO_ROOT" show-ref --verify --quiet "refs/heads/$SESSION_NAME" 2>/dev/null; then
+            echo -e "${BLUE}Deleting branch...${NC}"
+            git -C "$REPO_ROOT" branch -D "$SESSION_NAME" 2>/dev/null || true
+        fi
+    fi
+    
+    echo -e "${GREEN}Done!${NC}"
+    exit 0
+fi
+
+# Determine target path and session name
+if [[ -n "$SESSION_NAME" ]]; then
+    # Name provided: create worktree
+    REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+    if [[ -z "$REPO_ROOT" ]]; then
+        echo -e "${RED}Error: Not in a git repository${NC}"
+        exit 1
+    fi
+    
+    REPO_NAME=$(basename "$REPO_ROOT")
+    WORKTREE_DIR="$REPO_ROOT/../.worktrees/$REPO_NAME/$SESSION_NAME"
+    
+    if [[ -d "$WORKTREE_DIR" ]]; then
+        echo -e "${YELLOW}Using existing worktree: $WORKTREE_DIR${NC}"
+    else
+        echo -e "${GREEN}Creating worktree: $SESSION_NAME${NC}"
+        mkdir -p "$REPO_ROOT/../.worktrees/$REPO_NAME"
+        
+        if git -C "$REPO_ROOT" show-ref --verify --quiet "refs/heads/$SESSION_NAME" 2>/dev/null; then
+            git -C "$REPO_ROOT" worktree add "$WORKTREE_DIR" "$SESSION_NAME"
+        else
+            git -C "$REPO_ROOT" worktree add -b "$SESSION_NAME" "$WORKTREE_DIR"
+        fi
+    fi
+    
+    TARGET_PATH="$WORKTREE_DIR"
+else
+    # No name: use current directory
+    TARGET_PATH=$(pwd)
+    SESSION_NAME=$(basename "$TARGET_PATH")
+fi
+
+# Sanitize session name
+SESSION_NAME=$(echo "$SESSION_NAME" | tr ' ./' '_')
+TMUX_SESSION="dev_$SESSION_NAME"
+
+echo -e "${GREEN}Starting: ${BLUE}$SESSION_NAME${NC}"
+
+# Check if tmux session already exists
+if tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
+    echo -e "${YELLOW}Session exists.${NC}"
+    
+    if command -v fzf &>/dev/null; then
+        ACTION=$(echo -e "attach\nrestart\nstop" | fzf --height=5 --layout=reverse --prompt="Action: ")
+    else
+        echo "1) attach  2) restart  3) stop"
+        read -p "Choose [1-3]: " choice
+        case $choice in
+            1) ACTION="attach" ;;
+            2) ACTION="restart" ;;
+            3) ACTION="stop" ;;
+            *) ACTION="attach" ;;
+        esac
+    fi
+    
+    case "$ACTION" in
+        "attach")
+            tmux attach-session -t "$TMUX_SESSION"
+            exit 0
+            ;;
+        "restart")
+            tmux kill-session -t "$TMUX_SESSION" 2>/dev/null || true
+            sleep 0.5
+            ;;
+        "stop")
+            tmux kill-session -t "$TMUX_SESSION" 2>/dev/null || true
+            echo -e "${GREEN}Stopped.${NC}"
+            exit 0
+            ;;
+        *)
+            exit 0
+            ;;
+    esac
+fi
+
+# Start tmux session with 3 windows
+tmux new-session -d -s "$TMUX_SESSION" -n "code" -c "$TARGET_PATH"
+tmux send-keys -t "$TMUX_SESSION:code" "opencode" Enter
+
+tmux new-window -t "$TMUX_SESSION" -n "git" -c "$TARGET_PATH"
+tmux send-keys -t "$TMUX_SESSION:git" "lazygit" Enter
+
+tmux new-window -t "$TMUX_SESSION" -n "term" -c "$TARGET_PATH"
+
+tmux select-window -t "$TMUX_SESSION:code"
+tmux attach-session -t "$TMUX_SESSION"
