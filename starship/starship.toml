@@ -52,8 +52,8 @@ disabled = true
 [directory]
 style = "bg:#ff79c6 fg:#282a36"
 format = "[ $path ]($style)"
-truncation_length = 3
-truncation_symbol = ".../"
+truncate_to_repo = false
+truncation_length = 0
 
 [directory.substitutions]
 "Documents" = " "
