@@ -2,9 +2,7 @@
 # Starship Prompt Configuration - Minimal
 # ==============================================================================
 
-format = """
-$directory $git_branch $time
-$character"""
+format = "$directory $git_branch "
 
 add_newline = true
 
@@ -31,18 +29,5 @@ format = "[$symbol $branch]($style)"
 [git_status]
 disabled = true
 
-# ------------------------------------------------------------------------------
-# Time
-# ------------------------------------------------------------------------------
 [time]
-disabled = false
-time_format = "%H:%M"
-style = "dimmed white"
-format = "[$time]($style)"
-
-# ------------------------------------------------------------------------------
-# Character (prompt indicator)
-# ------------------------------------------------------------------------------
-[character]
-success_symbol = ""
-error_symbol = ""
+disabled = true
