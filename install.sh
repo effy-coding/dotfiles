@@ -103,6 +103,10 @@ rm -rf "$HOME/.config/nvim"
 ln -sf "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 echo "    $HOME/.config/nvim -> $DOTFILES_DIR/nvim"
 
+# opencode
+create_symlink "$DOTFILES_DIR/opencode/opencode.json" "$HOME/.config/opencode/opencode.json"
+create_symlink "$DOTFILES_DIR/opencode/my-theme.json" "$HOME/.config/opencode/my-theme.json"
+
 # ------------------------------------------------------------------------------
 # 6. Setup fzf key bindings and completion
 # ------------------------------------------------------------------------------
@@ -181,7 +185,8 @@ echo "      - Node.js (LTS)"
 echo "      - Bun (latest)"
 echo ""
 echo "    Quick commands:"
-echo "      dev                    # Start dev session (opencode + lazygit)"
-echo "      dev -w feature/auth    # Start in git worktree"
-echo "      agent-deck             # Session manager TUI"
+echo "      dev                    # Start dev session in current dir"
+echo "      dev s1                 # Create worktree + session"
+echo "      dev -l                 # List sessions"
+echo "      dev -c s1              # Clean up session"
 echo ""
