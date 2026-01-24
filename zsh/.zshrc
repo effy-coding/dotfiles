@@ -83,9 +83,6 @@ alias ll='eza -l'
 alias la='eza -la'
 alias lt='eza --tree'
 
-# bat (modern cat)
-alias cat='bat'
-
 # Package managers
 alias p='pnpm'
 alias n='npm'
