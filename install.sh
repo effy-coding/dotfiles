@@ -105,7 +105,7 @@ echo "    $HOME/.config/nvim -> $DOTFILES_DIR/nvim"
 
 # opencode
 create_symlink "$DOTFILES_DIR/opencode/opencode.json" "$HOME/.config/opencode/opencode.json"
-create_symlink "$DOTFILES_DIR/opencode/my-theme.json" "$HOME/.config/opencode/my-theme.json"
+create_symlink "$DOTFILES_DIR/opencode/themes/my-theme.json" "$HOME/.config/opencode/themes/my-theme.json"
 
 # ------------------------------------------------------------------------------
 # 6. Setup fzf key bindings and completion
