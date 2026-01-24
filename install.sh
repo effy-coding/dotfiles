@@ -162,11 +162,8 @@ create_symlink "$DOTFILES_DIR/scripts/dev" "$HOME/.local/bin/dev"
 # 11. Apply macOS settings
 # ------------------------------------------------------------------------------
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    read -p "==> Apply macOS settings? (keyboard repeat, mouse acceleration, etc.) [y/N] " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        "$DOTFILES_DIR/macos.sh"
-    fi
+    echo "==> Applying macOS settings..."
+    "$DOTFILES_DIR/macos.sh"
 fi
 
 # ------------------------------------------------------------------------------
