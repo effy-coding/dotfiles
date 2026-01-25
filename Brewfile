@@ -39,6 +39,7 @@ cask "font-jetbrains-mono-nerd-font"
 # Apps
 cask "rectangle"
 cask "1password"
+cask "1password-cli"
 
 # Network
 cask "tailscale"
