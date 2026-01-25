@@ -93,6 +93,9 @@ alias sb='supabase'
 alias tailscale='/Applications/Tailscale.app/Contents/MacOS/Tailscale'
 alias lg='lazygit'
 
+# Directories
+alias obs='cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/effy'
+
 # ------------------------------------------------------------------------------
 # mise (version manager)
 # ------------------------------------------------------------------------------
