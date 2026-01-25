@@ -16,7 +16,7 @@ truncate_to_repo = false
 truncation_length = 0
 
 [directory.substitutions]
-"~/workspaces" = ""
+"~/workspaces/" = ""
 
 # ------------------------------------------------------------------------------
 # Git
