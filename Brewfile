@@ -27,6 +27,9 @@ brew "tmux"
 # Version Manager
 brew "mise"
 
+# Python
+brew "uv"
+
 # Development - React Native / Expo
 brew "watchman"
 
