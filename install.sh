@@ -126,6 +126,7 @@ if command -v mise &> /dev/null; then
     echo "==> Installing mise tools (node, bun)..."
     mise install
     mise trust "$HOME/.mise.toml"
+    mise settings set trusted_config_paths "~/workspaces"
 fi
 
 # ------------------------------------------------------------------------------

@@ -42,7 +42,7 @@ cask "1password"
 cask "1password-cli"
 
 # Network
-cask "tailscale"
+cask "tailscale-app"
 
 # Mac App Store
 brew "mas"
