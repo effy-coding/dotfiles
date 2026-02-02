@@ -69,3 +69,11 @@ keybind = super+digit_6=text:\x01\x36
 keybind = super+digit_7=text:\x01\x37
 keybind = super+digit_8=text:\x01\x38
 keybind = super+digit_9=text:\x01\x39
+
+# ------------------------------------------------------------------------------
+# Keybindings: VSCode style for nvim
+# ------------------------------------------------------------------------------
+# Cmd+P: Pass to nvim (unbind ghostty default, let nvim handle it)
+keybind = super+p=unbind
+# Cmd+Shift+F: Pass to nvim
+keybind = super+shift+f=unbind
