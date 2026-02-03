@@ -73,7 +73,7 @@ keybind = super+digit_9=text:\x01\x39
 # ------------------------------------------------------------------------------
 # Keybindings: VSCode style for nvim
 # ------------------------------------------------------------------------------
-# Cmd+P: Pass to nvim (unbind ghostty default, let nvim handle it)
-keybind = super+p=unbind
-# Cmd+Shift+F: Pass to nvim
-keybind = super+shift+f=unbind
+# Cmd+P: Send Ctrl+] p sequence
+keybind = super+p=text:\x1dp
+# Cmd+Shift+F: Send Ctrl+] f sequence
+keybind = super+shift+f=text:\x1df
