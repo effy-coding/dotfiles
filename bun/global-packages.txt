@@ -2,3 +2,4 @@
 # Install with: xargs bun add -g < global-packages.txt
 
 opencode-ai
+eas-cli
