@@ -56,3 +56,4 @@ brew "mas"
 mas "Xcode", id: 497799835
 mas "Slack", id: 803453959
 mas "KakaoTalk", id: 869223134
+mas "Transporter", id: 1450874784
