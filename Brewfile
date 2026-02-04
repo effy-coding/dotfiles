@@ -17,6 +17,7 @@ brew "eza"
 brew "yq"
 brew "fd"
 brew "tree"
+brew "awscli"
 
 # Editor
 brew "neovim"
@@ -32,6 +33,9 @@ brew "uv"
 
 # Development - React Native / Expo
 brew "watchman"
+
+# iOS Development
+brew "fastlane"
 
 # Container
 cask "orbstack"
