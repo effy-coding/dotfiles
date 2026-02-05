@@ -8,6 +8,14 @@
 export PATH="$HOME/.bun/bin:$HOME/.local/bin:$PATH"
 
 # ------------------------------------------------------------------------------
+# Android SDK (Android Studio)
+# ------------------------------------------------------------------------------
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+if [[ -d "$ANDROID_HOME" ]]; then
+    export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+fi
+
+# ------------------------------------------------------------------------------
 # History Settings
 # ------------------------------------------------------------------------------
 HISTFILE=~/.zsh_history

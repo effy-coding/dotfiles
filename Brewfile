@@ -37,6 +37,10 @@ brew "watchman"
 # iOS Development
 brew "fastlane"
 
+# Android Development
+cask "android-studio"
+cask "android-platform-tools"  # adb, fastboot 등 CLI 도구
+
 # Container
 cask "orbstack"
 
