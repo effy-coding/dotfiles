@@ -77,3 +77,6 @@ keybind = super+digit_9=text:\x01\x39
 keybind = super+p=text:\x1dp
 # Cmd+Shift+F: Send Ctrl+] f sequence
 keybind = super+shift+f=text:\x1df
+
+# Cmd+N: New tmux window
+keybind = super+n=text:\x01c

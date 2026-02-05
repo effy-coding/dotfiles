@@ -4,6 +4,7 @@
 
 [alias]
 	s = status
+	c = checkout
 
 [core]
 	pager = delta
@@ -13,7 +14,7 @@
 	defaultBranch = main
 
 [pull]
-	rebase = false
+	rebase = true
 
 [delta]
 	navigate = true
