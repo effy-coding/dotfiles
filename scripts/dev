@@ -6,8 +6,10 @@
 # Usage:
 #   dev                     # Start session in current directory
 #   dev <name>              # Create worktree + session
-#   dev -l                  # List active sessions
+#   dev -l                  # List sessions (worktree-based, with tmux status)
 #   dev -c <name>           # Clean up session (tmux + worktree + branch)
+#   dev -c --all            # Clean up ALL sessions for current repo
+#   dev -c --orphans        # Clean up sessions without active tmux
 # ==============================================================================
 
 set -e
@@ -17,12 +19,15 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
+DIM='\033[2m'
 NC='\033[0m'
 
 # Defaults
 SESSION_NAME=""
 LIST_MODE=false
 CLEAN_MODE=false
+CLEAN_ALL=false
+CLEAN_ORPHANS=false
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -35,12 +40,22 @@ while [[ $# -gt 0 ]]; do
             CLEAN_MODE=true
             shift
             ;;
+        --all)
+            CLEAN_ALL=true
+            shift
+            ;;
+        --orphans)
+            CLEAN_ORPHANS=true
+            shift
+            ;;
         -h|--help)
             echo "Usage: dev [options] [name]"
             echo ""
             echo "Options:"
-            echo "  -l, --list              List active sessions"
+            echo "  -l, --list              List sessions (worktree + tmux status)"
             echo "  -c, --clean <name>      Clean up session (tmux + worktree + branch)"
+            echo "  -c --all                Clean up ALL sessions for current repo"
+            echo "  -c --orphans            Clean up sessions without active tmux"
             echo "  -h, --help              Show this help"
             echo ""
             echo "Examples:"
@@ -48,6 +63,8 @@ while [[ $# -gt 0 ]]; do
             echo "  dev s1                  # Create worktree + session"
             echo "  dev -l                  # List all sessions"
             echo "  dev -c s1               # Clean up session"
+            echo "  dev -c --all            # Clean up all sessions"
+            echo "  dev -c --orphans        # Clean up orphaned sessions"
             exit 0
             ;;
         -*)
@@ -61,46 +78,173 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# List mode
+# Helper: check if tmux session exists
+_tmux_session_exists() {
+    tmux has-session -t "$1" 2>/dev/null
+}
+
+# Helper: clean up a single session by name
+_clean_session() {
+    local name="$1"
+    local repo_root="$2"
+    local sanitized=$(echo "$name" | tr ' ./' '_')
+
+    echo -e "${YELLOW}Cleaning up: $name${NC}"
+
+    # 1. Stop tmux session
+    if _tmux_session_exists "dev_$sanitized"; then
+        echo -e "  ${BLUE}Stopping tmux session...${NC}"
+        tmux kill-session -t "dev_$sanitized"
+    fi
+
+    # 2. Remove worktree and branch
+    if [[ -n "$repo_root" ]]; then
+        local repo_name=$(basename "$repo_root")
+        local worktree_dir="$repo_root/../.worktrees/$repo_name/$name"
+
+        if [[ -d "$worktree_dir" ]]; then
+            echo -e "  ${BLUE}Removing worktree...${NC}"
+            git -C "$repo_root" worktree remove "$worktree_dir" --force 2>/dev/null || true
+        fi
+
+        if git -C "$repo_root" show-ref --verify --quiet "refs/heads/$name" 2>/dev/null; then
+            echo -e "  ${BLUE}Deleting branch...${NC}"
+            git -C "$repo_root" branch -D "$name" 2>/dev/null || true
+        fi
+    fi
+}
+
+# List mode: worktree-based with tmux status
 if [[ "$LIST_MODE" == true ]]; then
-    tmux list-sessions 2>/dev/null | grep "^dev_" || echo "No dev sessions running"
+    REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+    if [[ -z "$REPO_ROOT" ]]; then
+        echo -e "${RED}Error: Not in a git repository${NC}"
+        exit 1
+    fi
+
+    REPO_NAME=$(basename "$REPO_ROOT")
+    WORKTREE_BASE="$REPO_ROOT/../.worktrees/$REPO_NAME"
+
+    if [[ ! -d "$WORKTREE_BASE" ]] || [[ -z "$(ls -A "$WORKTREE_BASE" 2>/dev/null)" ]]; then
+        echo "No dev sessions for $REPO_NAME"
+        exit 0
+    fi
+
+    echo -e "${GREEN}Sessions for ${BLUE}$REPO_NAME${NC}:"
+    echo ""
+
+    for wt_dir in "$WORKTREE_BASE"/*/; do
+        [[ -d "$wt_dir" ]] || continue
+        wt_name=$(basename "$wt_dir")
+        sanitized=$(echo "$wt_name" | tr ' ./' '_')
+        tmux_name="dev_$sanitized"
+
+        # Get branch info
+        branch=$(git -C "$wt_dir" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")
+
+        if _tmux_session_exists "$tmux_name"; then
+            # Get window count
+            win_count=$(tmux list-windows -t "$tmux_name" 2>/dev/null | wc -l | tr -d ' ')
+            echo -e "  ${GREEN}*${NC} ${wt_name}  ${DIM}[$branch]${NC}  ${GREEN}${win_count} windows${NC}"
+        else
+            echo -e "  ${DIM}-${NC} ${wt_name}  ${DIM}[$branch]  (no tmux)${NC}"
+        fi
+    done
+    echo ""
     exit 0
 fi
 
 # Clean mode
 if [[ "$CLEAN_MODE" == true ]]; then
+    REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+
+    # --all: clean everything for this repo
+    if [[ "$CLEAN_ALL" == true ]]; then
+        if [[ -z "$REPO_ROOT" ]]; then
+            echo -e "${RED}Error: Not in a git repository${NC}"
+            exit 1
+        fi
+        REPO_NAME=$(basename "$REPO_ROOT")
+        WORKTREE_BASE="$REPO_ROOT/../.worktrees/$REPO_NAME"
+
+        if [[ ! -d "$WORKTREE_BASE" ]]; then
+            echo "No worktrees to clean for $REPO_NAME"
+            exit 0
+        fi
+
+        names=()
+        for wt_dir in "$WORKTREE_BASE"/*/; do
+            [[ -d "$wt_dir" ]] || continue
+            names+=("$(basename "$wt_dir")")
+        done
+
+        if [[ ${#names[@]} -eq 0 ]]; then
+            echo "No worktrees to clean for $REPO_NAME"
+            exit 0
+        fi
+
+        echo -e "${YELLOW}Will clean ${#names[@]} sessions for $REPO_NAME:${NC}"
+        printf '  %s\n' "${names[@]}"
+        echo ""
+        read -p "Continue? [y/N] " confirm
+        [[ "$confirm" =~ ^[yY]$ ]] || exit 0
+
+        for name in "${names[@]}"; do
+            _clean_session "$name" "$REPO_ROOT"
+        done
+        echo -e "${GREEN}All done!${NC}"
+        exit 0
+    fi
+
+    # --orphans: clean worktrees without active tmux sessions
+    if [[ "$CLEAN_ORPHANS" == true ]]; then
+        if [[ -z "$REPO_ROOT" ]]; then
+            echo -e "${RED}Error: Not in a git repository${NC}"
+            exit 1
+        fi
+        REPO_NAME=$(basename "$REPO_ROOT")
+        WORKTREE_BASE="$REPO_ROOT/../.worktrees/$REPO_NAME"
+
+        if [[ ! -d "$WORKTREE_BASE" ]]; then
+            echo "No worktrees to clean for $REPO_NAME"
+            exit 0
+        fi
+
+        orphans=()
+        for wt_dir in "$WORKTREE_BASE"/*/; do
+            [[ -d "$wt_dir" ]] || continue
+            wt_name=$(basename "$wt_dir")
+            sanitized=$(echo "$wt_name" | tr ' ./' '_')
+            if ! _tmux_session_exists "dev_$sanitized"; then
+                orphans+=("$wt_name")
+            fi
+        done
+
+        if [[ ${#orphans[@]} -eq 0 ]]; then
+            echo "No orphaned sessions for $REPO_NAME"
+            exit 0
+        fi
+
+        echo -e "${YELLOW}Orphaned sessions (no active tmux):${NC}"
+        printf '  %s\n' "${orphans[@]}"
+        echo ""
+        read -p "Clean up all ${#orphans[@]} orphans? [y/N] " confirm
+        [[ "$confirm" =~ ^[yY]$ ]] || exit 0
+
+        for name in "${orphans[@]}"; do
+            _clean_session "$name" "$REPO_ROOT"
+        done
+        echo -e "${GREEN}All done!${NC}"
+        exit 0
+    fi
+
+    # Single session clean
     if [[ -z "$SESSION_NAME" ]]; then
         echo -e "${RED}Error: Specify session name. Usage: dev -c <name>${NC}"
         exit 1
     fi
-    
-    REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
-    SANITIZED_NAME=$(echo "$SESSION_NAME" | tr ' ./' '_')
-    
-    echo -e "${YELLOW}Cleaning up: $SESSION_NAME${NC}"
-    
-    # 1. Stop tmux session
-    if tmux has-session -t "dev_$SANITIZED_NAME" 2>/dev/null; then
-        echo -e "${BLUE}Stopping tmux session...${NC}"
-        tmux kill-session -t "dev_$SANITIZED_NAME"
-    fi
-    
-    # 2. Remove worktree and branch
-    if [[ -n "$REPO_ROOT" ]]; then
-        REPO_NAME=$(basename "$REPO_ROOT")
-        WORKTREE_DIR="$REPO_ROOT/../.worktrees/$REPO_NAME/$SESSION_NAME"
-        
-        if [[ -d "$WORKTREE_DIR" ]]; then
-            echo -e "${BLUE}Removing worktree...${NC}"
-            git -C "$REPO_ROOT" worktree remove "$WORKTREE_DIR" --force 2>/dev/null || true
-        fi
-        
-        if git -C "$REPO_ROOT" show-ref --verify --quiet "refs/heads/$SESSION_NAME" 2>/dev/null; then
-            echo -e "${BLUE}Deleting branch...${NC}"
-            git -C "$REPO_ROOT" branch -D "$SESSION_NAME" 2>/dev/null || true
-        fi
-    fi
-    
+
+    _clean_session "$SESSION_NAME" "$REPO_ROOT"
     echo -e "${GREEN}Done!${NC}"
     exit 0
 fi
@@ -137,7 +281,8 @@ else
     SESSION_NAME=$(basename "$TARGET_PATH")
 fi
 
-# Sanitize session name
+# Keep original name for cleanup, then sanitize for tmux
+ORIGINAL_SESSION_NAME="$SESSION_NAME"
 SESSION_NAME=$(echo "$SESSION_NAME" | tr ' ./' '_')
 TMUX_SESSION="dev_$SESSION_NAME"
 
@@ -170,7 +315,8 @@ if tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
             sleep 0.5
             ;;
         "stop")
-            tmux kill-session -t "$TMUX_SESSION" 2>/dev/null || true
+            REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+            _clean_session "$ORIGINAL_SESSION_NAME" "$REPO_ROOT"
             echo -e "${GREEN}Stopped.${NC}"
             exit 0
             ;;

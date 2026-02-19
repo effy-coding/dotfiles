@@ -115,3 +115,4 @@ fi
 # Starship Prompt
 # ------------------------------------------------------------------------------
 eval "$(starship init zsh)"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
