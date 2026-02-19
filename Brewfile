@@ -40,6 +40,7 @@ brew "fastlane"
 # Android Development
 cask "android-studio"
 cask "android-platform-tools"  # adb, fastboot 등 CLI 도구
+brew "openjdk@17"
 
 # Container
 cask "orbstack"
