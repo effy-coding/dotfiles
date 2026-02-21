@@ -16,6 +16,7 @@ brew "bat"
 brew "eza"
 brew "yq"
 brew "fd"
+brew "ffmpeg"
 brew "tree"
 brew "awscli"
 
