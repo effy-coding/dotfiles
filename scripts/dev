@@ -80,7 +80,7 @@ done
 
 # Helper: check if tmux session exists
 _tmux_session_exists() {
-    tmux has-session -t "$1" 2>/dev/null
+    tmux has-session -t "=$1" 2>/dev/null
 }
 
 # Helper: clean up a single session by name
@@ -94,7 +94,7 @@ _clean_session() {
     # 1. Stop tmux session
     if _tmux_session_exists "dev_$sanitized"; then
         echo -e "  ${BLUE}Stopping tmux session...${NC}"
-        tmux kill-session -t "dev_$sanitized"
+        tmux kill-session -t "=dev_$sanitized"
     fi
 
     # 2. Remove worktree and branch
@@ -144,7 +144,7 @@ if [[ "$LIST_MODE" == true ]]; then
 
         if _tmux_session_exists "$tmux_name"; then
             # Get window count
-            win_count=$(tmux list-windows -t "$tmux_name" 2>/dev/null | wc -l | tr -d ' ')
+            win_count=$(tmux list-windows -t "=$tmux_name" 2>/dev/null | wc -l | tr -d ' ')
             echo -e "  ${GREEN}*${NC} ${wt_name}  ${DIM}[$branch]${NC}  ${GREEN}${win_count} windows${NC}"
         else
             echo -e "  ${DIM}-${NC} ${wt_name}  ${DIM}[$branch]  (no tmux)${NC}"
@@ -289,7 +289,7 @@ TMUX_SESSION="dev_$SESSION_NAME"
 echo -e "${GREEN}Starting: ${BLUE}$SESSION_NAME${NC}"
 
 # Check if tmux session already exists
-if tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
+if tmux has-session -t "=$TMUX_SESSION" 2>/dev/null; then
     echo -e "${YELLOW}Session exists.${NC}"
     
     if command -v fzf &>/dev/null; then
@@ -307,11 +307,11 @@ if tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
     
     case "$ACTION" in
         "attach")
-            tmux attach-session -t "$TMUX_SESSION"
+            tmux attach-session -t "=$TMUX_SESSION"
             exit 0
             ;;
         "restart")
-            tmux kill-session -t "$TMUX_SESSION" 2>/dev/null || true
+            tmux kill-session -t "=$TMUX_SESSION" 2>/dev/null || true
             sleep 0.5
             ;;
         "stop")
@@ -326,14 +326,20 @@ if tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
     esac
 fi
 
+# Ensure tmux server is running (let continuum restore finish first)
+if ! tmux list-sessions 2>/dev/null; then
+    tmux start-server
+    sleep 1
+fi
+
 # Start tmux session with 3 windows
 tmux new-session -d -s "$TMUX_SESSION" -n "code" -c "$TARGET_PATH"
-tmux send-keys -t "$TMUX_SESSION:code" "opencode" Enter
+tmux send-keys -t "=$TMUX_SESSION:code" "opencode" Enter
 
-tmux new-window -t "$TMUX_SESSION" -n "git" -c "$TARGET_PATH"
-tmux send-keys -t "$TMUX_SESSION:git" "lazygit" Enter
+tmux new-window -t "=$TMUX_SESSION" -n "git" -c "$TARGET_PATH"
+tmux send-keys -t "=$TMUX_SESSION:git" "lazygit" Enter
 
-tmux new-window -t "$TMUX_SESSION" -n "term" -c "$TARGET_PATH"
+tmux new-window -t "=$TMUX_SESSION" -n "term" -c "$TARGET_PATH"
 
-tmux select-window -t "$TMUX_SESSION:code"
-tmux attach-session -t "$TMUX_SESSION"
+tmux select-window -t "=$TMUX_SESSION:code"
+tmux attach-session -t "=$TMUX_SESSION"
