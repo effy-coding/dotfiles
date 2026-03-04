@@ -12,6 +12,7 @@ brew "lazygit"
 
 # CLI Tools
 brew "ripgrep"
+brew "schpet/tap/linear"
 brew "bat"
 brew "eza"
 brew "yq"
