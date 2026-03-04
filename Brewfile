@@ -19,6 +19,7 @@ brew "fd"
 brew "ffmpeg"
 brew "tree"
 brew "awscli"
+brew "mole"
 
 # Editor
 brew "neovim"
