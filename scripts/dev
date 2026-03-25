@@ -334,7 +334,7 @@ fi
 
 # Start tmux session with 3 windows
 tmux new-session -d -s "$TMUX_SESSION" -n "code" -c "$TARGET_PATH"
-tmux send-keys -t "=$TMUX_SESSION:code" "opencode" Enter
+tmux send-keys -t "=$TMUX_SESSION:code" "claude" Enter
 
 tmux new-window -t "=$TMUX_SESSION" -n "git" -c "$TARGET_PATH"
 tmux send-keys -t "=$TMUX_SESSION:git" "lazygit" Enter
