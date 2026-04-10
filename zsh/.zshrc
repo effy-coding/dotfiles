@@ -121,3 +121,12 @@ fi
 # ------------------------------------------------------------------------------
 eval "$(starship init zsh)"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+# bun completions
+[ -s "/Users/effy/.bun/_bun" ] && source "/Users/effy/.bun/_bun"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/effy/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/effy/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/effy/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/effy/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
