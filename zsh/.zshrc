@@ -100,6 +100,7 @@ alias lt='eza --tree'
 alias p='pnpm'
 alias n='npm'
 alias b='bun'
+alias t='turbo'
 
 # CLI tools
 alias sb='supabase'
