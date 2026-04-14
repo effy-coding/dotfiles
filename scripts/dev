@@ -272,6 +272,21 @@ if [[ -n "$SESSION_NAME" ]]; then
         else
             git -C "$REPO_ROOT" worktree add -b "$SESSION_NAME" "$WORKTREE_DIR"
         fi
+
+        # Copy .env files from main worktree (skip prod configs)
+        if command -v fd &>/dev/null; then
+            fd -H -I '^\.env' -E node_modules -E '.claude/worktrees' "$REPO_ROOT" | while read -r src; do
+                rel="${src#$REPO_ROOT/}"
+                # Skip prod env files
+                if [[ "$rel" == *prod* ]]; then
+                    continue
+                fi
+                dest="$WORKTREE_DIR/$rel"
+                mkdir -p "$(dirname "$dest")"
+                cp "$src" "$dest"
+                echo -e "  ${DIM}Copied: $rel${NC}"
+            done
+        fi
     fi
     
     TARGET_PATH="$WORKTREE_DIR"
