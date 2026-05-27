@@ -5,6 +5,7 @@
 [alias]
 	s = status
 	c = checkout
+	nuke = !git reset --hard && git clean -fd
 
 [core]
 	pager = delta

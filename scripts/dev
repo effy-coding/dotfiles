@@ -5,7 +5,7 @@
 # ==============================================================================
 # Usage:
 #   dev                     # Start session in current directory
-#   dev <name>              # Create worktree + session
+#   dev <name>              # Create worktree + session, then choose agent
 #   dev -l                  # List sessions (worktree-based, with tmux status)
 #   dev -c <name>           # Clean up session (tmux + worktree + branch)
 #   dev -c --all            # Clean up ALL sessions for current repo
@@ -81,6 +81,21 @@ done
 # Helper: check if tmux session exists
 _tmux_session_exists() {
     tmux has-session -t "=$1" 2>/dev/null
+}
+
+# Helper: choose AI agent for the code window
+_select_agent() {
+    if command -v fzf &>/dev/null; then
+        printf "claude\ncodex\nopencode\n" | fzf --height=7 --layout=reverse --prompt="Agent: " || true
+    else
+        echo "1) claude  2) codex  3) opencode" >&2
+        read -p "Choose agent [1-3]: " choice
+        case $choice in
+            2) echo "codex" ;;
+            3) echo "opencode" ;;
+            *) echo "claude" ;;
+        esac
+    fi
 }
 
 # Helper: clean up a single session by name
@@ -347,9 +362,15 @@ if ! tmux list-sessions 2>/dev/null; then
     sleep 1
 fi
 
+AGENT_CMD=$(_select_agent)
+if [[ -z "$AGENT_CMD" ]]; then
+    echo -e "${YELLOW}Canceled.${NC}"
+    exit 0
+fi
+
 # Start tmux session with 3 windows
 tmux new-session -d -s "$TMUX_SESSION" -n "code" -c "$TARGET_PATH"
-tmux send-keys -t "=$TMUX_SESSION:code" "claude" Enter
+tmux send-keys -t "=$TMUX_SESSION:code" "$AGENT_CMD" Enter
 
 tmux new-window -t "=$TMUX_SESSION" -n "git" -c "$TARGET_PATH"
 tmux send-keys -t "=$TMUX_SESSION:git" "lazygit" Enter
