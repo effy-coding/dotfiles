@@ -372,9 +372,6 @@ fi
 tmux new-session -d -s "$TMUX_SESSION" -n "code" -c "$TARGET_PATH"
 tmux send-keys -t "=$TMUX_SESSION:code" "$AGENT_CMD" Enter
 
-tmux new-window -t "=$TMUX_SESSION" -n "git" -c "$TARGET_PATH"
-tmux send-keys -t "=$TMUX_SESSION:git" "lazygit" Enter
-
 tmux new-window -t "=$TMUX_SESSION" -n "term" -c "$TARGET_PATH"
 
 tmux select-window -t "=$TMUX_SESSION:code"
