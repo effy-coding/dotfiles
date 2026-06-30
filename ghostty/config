@@ -28,6 +28,16 @@ cursor-style-blink = true
 shell-integration = zsh
 
 # ------------------------------------------------------------------------------
+# Mouse / links
+# ------------------------------------------------------------------------------
+# Keep Cmd-hover/Cmd-click URL handling working even inside tmux sessions.
+# tmux enables mouse reporting, which can otherwise capture the click before
+# Ghostty opens the link.
+link-url = true
+mouse-reporting = false
+keybind = super+shift+m=toggle_mouse_reporting
+
+# ------------------------------------------------------------------------------
 # Theme: Dracula
 # ------------------------------------------------------------------------------
 background = 282a36
