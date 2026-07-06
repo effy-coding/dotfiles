@@ -30,11 +30,12 @@ shell-integration = zsh
 # ------------------------------------------------------------------------------
 # Mouse / links
 # ------------------------------------------------------------------------------
-# Keep Cmd-hover/Cmd-click URL handling working even inside tmux sessions.
-# tmux enables mouse reporting, which can otherwise capture the click before
-# Ghostty opens the link.
+# Keep Cmd-hover/Cmd-click URL handling working.
+# Leave mouse reporting on (the default) so TUI apps like Claude Code get
+# trackpad scroll. Toggle it off with super+shift+m if a tmux session ever
+# needs to steal clicks for its own mouse handling.
 link-url = true
-mouse-reporting = false
+mouse-reporting = true
 keybind = super+shift+m=toggle_mouse_reporting
 
 # ------------------------------------------------------------------------------
