@@ -368,11 +368,12 @@ if [[ -z "$AGENT_CMD" ]]; then
     exit 0
 fi
 
-# Start tmux session with 3 windows
+# Start tmux session with code and diff windows
 tmux new-session -d -s "$TMUX_SESSION" -n "code" -c "$TARGET_PATH"
 tmux send-keys -t "=$TMUX_SESSION:code" "$AGENT_CMD" Enter
 
-tmux new-window -t "=$TMUX_SESSION" -n "term" -c "$TARGET_PATH"
+tmux new-window -t "=$TMUX_SESSION" -n "diff" -c "$TARGET_PATH"
+tmux send-keys -t "=$TMUX_SESSION:diff" "hunk diff" Enter
 
 tmux select-window -t "=$TMUX_SESSION:code"
 tmux attach-session -t "=$TMUX_SESSION"

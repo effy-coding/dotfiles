@@ -21,6 +21,7 @@ brew "ffmpeg"
 brew "tree"
 brew "awscli"
 brew "mole"
+brew "hunk"
 
 # Editor
 brew "neovim"
