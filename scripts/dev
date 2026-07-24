@@ -10,6 +10,7 @@
 #   dev -c <name>           # Clean up session (tmux + worktree + branch)
 #   dev -c --all            # Clean up ALL sessions for current repo
 #   dev -c --orphans        # Clean up sessions without active tmux
+#   DEV_CLEAN_JOBS=8 dev -c --all  # Clean up with up to 8 workers
 # ==============================================================================
 
 set -e
@@ -28,6 +29,7 @@ LIST_MODE=false
 CLEAN_MODE=false
 CLEAN_ALL=false
 CLEAN_ORPHANS=false
+CLEAN_JOBS="${DEV_CLEAN_JOBS:-4}"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -129,6 +131,34 @@ _clean_session() {
     fi
 }
 
+# Clean multiple sessions concurrently while bounding the number of workers.
+_clean_sessions_parallel() {
+    local repo_root="$1"
+    shift
+    local -a pids=()
+    local failed=0
+
+    for name in "$@"; do
+        while [[ ${#pids[@]} -ge $CLEAN_JOBS ]]; do
+            if ! wait "${pids[0]}"; then
+                failed=1
+            fi
+            pids=("${pids[@]:1}")
+        done
+
+        _clean_session "$name" "$repo_root" &
+        pids+=("$!")
+    done
+
+    for pid in "${pids[@]}"; do
+        if ! wait "$pid"; then
+            failed=1
+        fi
+    done
+
+    return "$failed"
+}
+
 # List mode: worktree-based with tmux status
 if [[ "$LIST_MODE" == true ]]; then
     REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -171,6 +201,11 @@ fi
 
 # Clean mode
 if [[ "$CLEAN_MODE" == true ]]; then
+    if ! [[ "$CLEAN_JOBS" =~ ^[1-9][0-9]*$ ]]; then
+        echo -e "${RED}Error: DEV_CLEAN_JOBS must be a positive integer${NC}"
+        exit 1
+    fi
+
     REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 
     # --all: clean everything for this repo
@@ -204,9 +239,10 @@ if [[ "$CLEAN_MODE" == true ]]; then
         read -p "Continue? [y/N] " confirm
         [[ "$confirm" =~ ^[yY]$ ]] || exit 0
 
-        for name in "${names[@]}"; do
-            _clean_session "$name" "$REPO_ROOT"
-        done
+        if ! _clean_sessions_parallel "$REPO_ROOT" "${names[@]}"; then
+            echo -e "${RED}Some sessions failed to clean up.${NC}"
+            exit 1
+        fi
         echo -e "${GREEN}All done!${NC}"
         exit 0
     fi
@@ -246,9 +282,10 @@ if [[ "$CLEAN_MODE" == true ]]; then
         read -p "Clean up all ${#orphans[@]} orphans? [y/N] " confirm
         [[ "$confirm" =~ ^[yY]$ ]] || exit 0
 
-        for name in "${orphans[@]}"; do
-            _clean_session "$name" "$REPO_ROOT"
-        done
+        if ! _clean_sessions_parallel "$REPO_ROOT" "${orphans[@]}"; then
+            echo -e "${RED}Some sessions failed to clean up.${NC}"
+            exit 1
+        fi
         echo -e "${GREEN}All done!${NC}"
         exit 0
     fi
