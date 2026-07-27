@@ -30,6 +30,7 @@ CLEAN_MODE=false
 CLEAN_ALL=false
 CLEAN_ORPHANS=false
 CLEAN_JOBS="${DEV_CLEAN_JOBS:-4}"
+TMUX_ORIGINAL_EXIT_EMPTY=""
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -83,6 +84,38 @@ done
 # Helper: check if tmux session exists
 _tmux_session_exists() {
     tmux has-session -t "=$1" 2>/dev/null
+}
+
+# Keep the tmux server alive until Resurrect records the post-cleanup state.
+_prepare_tmux_snapshot_sync() {
+    if tmux list-sessions &>/dev/null; then
+        TMUX_ORIGINAL_EXIT_EMPTY=$(tmux show-options -gv exit-empty)
+        tmux set-option -g exit-empty off
+    fi
+}
+
+_restore_tmux_exit_empty() {
+    if [[ -n "$TMUX_ORIGINAL_EXIT_EMPTY" ]] && tmux display-message -p '#{pid}' &>/dev/null; then
+        tmux set-option -g exit-empty "$TMUX_ORIGINAL_EXIT_EMPTY"
+        TMUX_ORIGINAL_EXIT_EMPTY=""
+    fi
+}
+
+_sync_tmux_snapshot() {
+    local save_script=""
+
+    if tmux display-message -p '#{pid}' &>/dev/null; then
+        save_script=$(tmux show-options -gqv @resurrect-save-script-path)
+    fi
+
+    if [[ -n "$save_script" ]] && [[ -x "$save_script" ]]; then
+        echo -e "  ${BLUE}Updating tmux restore snapshot...${NC}"
+        if ! "$save_script" quiet >/dev/null; then
+            echo -e "  ${YELLOW}Warning: Failed to update tmux restore snapshot.${NC}" >&2
+        fi
+    fi
+
+    _restore_tmux_exit_empty
 }
 
 # Helper: choose AI agent for the code window
@@ -206,6 +239,9 @@ if [[ "$CLEAN_MODE" == true ]]; then
         exit 1
     fi
 
+    _prepare_tmux_snapshot_sync
+    trap _restore_tmux_exit_empty EXIT
+
     REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 
     # --all: clean everything for this repo
@@ -243,6 +279,7 @@ if [[ "$CLEAN_MODE" == true ]]; then
             echo -e "${RED}Some sessions failed to clean up.${NC}"
             exit 1
         fi
+        _sync_tmux_snapshot
         echo -e "${GREEN}All done!${NC}"
         exit 0
     fi
@@ -286,6 +323,7 @@ if [[ "$CLEAN_MODE" == true ]]; then
             echo -e "${RED}Some sessions failed to clean up.${NC}"
             exit 1
         fi
+        _sync_tmux_snapshot
         echo -e "${GREEN}All done!${NC}"
         exit 0
     fi
@@ -297,6 +335,7 @@ if [[ "$CLEAN_MODE" == true ]]; then
     fi
 
     _clean_session "$SESSION_NAME" "$REPO_ROOT"
+    _sync_tmux_snapshot
     echo -e "${GREEN}Done!${NC}"
     exit 0
 fi
