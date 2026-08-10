@@ -86,6 +86,51 @@ _tmux_session_exists() {
     tmux has-session -t "=$1" 2>/dev/null
 }
 
+# ------------------------------------------------------------------------------
+# Issue title lookup (optional): if a session name starts with an issue key
+# (e.g. ABC-123) and the `linear` CLI is installed and authenticated, `dev -l`
+# shows the issue title. Auth and titles live outside this repo
+# (~/.config/linear, ~/.cache/dev) so nothing project-specific is committed.
+# ------------------------------------------------------------------------------
+TITLE_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/dev/issue-titles"
+TITLE_MAX_LEN="${DEV_TITLE_MAX_LEN:-40}"
+
+# Extract a leading issue key (ABC-123) from a session name, uppercased
+_issue_key() {
+    local name
+    name=$(echo "$1" | tr '[:lower:]' '[:upper:]')
+    if [[ "$name" =~ ^[A-Z][A-Z0-9]*-[0-9]+ ]]; then
+        echo "${BASH_REMATCH[0]}"
+    fi
+}
+
+# Fetch and cache a title (cache entries expire after a day)
+_fetch_issue_title() {
+    local key="$1"
+    local cache="$TITLE_CACHE_DIR/$key"
+    if [[ -f "$cache" ]] && [[ -n $(find "$cache" -mtime -1 2>/dev/null) ]]; then
+        return 0
+    fi
+    local title
+    title=$(linear issue title "$key" 2>/dev/null || true)
+    if [[ -n "$title" ]]; then
+        mkdir -p "$TITLE_CACHE_DIR"
+        printf '%s' "$title" > "$cache"
+    fi
+}
+
+# Read a cached title, truncated for display
+_issue_title() {
+    local cache="$TITLE_CACHE_DIR/$1"
+    [[ -f "$cache" ]] || return 0
+    local title
+    title=$(<"$cache")
+    if (( ${#title} > TITLE_MAX_LEN )); then
+        title="${title:0:$((TITLE_MAX_LEN - 1))}…"
+    fi
+    printf '%s' "$title"
+}
+
 # Keep the tmux server alive until Resurrect records the post-cleanup state.
 _prepare_tmux_snapshot_sync() {
     if tmux list-sessions &>/dev/null; then
@@ -208,6 +253,21 @@ if [[ "$LIST_MODE" == true ]]; then
         exit 0
     fi
 
+    # Prefetch issue titles concurrently (cache misses only)
+    if command -v linear &>/dev/null; then
+        title_pids=()
+        for wt_dir in "$WORKTREE_BASE"/*/; do
+            [[ -d "$wt_dir" ]] || continue
+            key=$(_issue_key "$(basename "$wt_dir")")
+            [[ -n "$key" ]] || continue
+            _fetch_issue_title "$key" &
+            title_pids+=("$!")
+        done
+        for pid in "${title_pids[@]}"; do
+            wait "$pid" 2>/dev/null || true
+        done
+    fi
+
     echo -e "${GREEN}Sessions for ${BLUE}$REPO_NAME${NC}:"
     echo ""
 
@@ -220,12 +280,16 @@ if [[ "$LIST_MODE" == true ]]; then
         # Get branch info
         branch=$(git -C "$wt_dir" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")
 
+        title=""
+        key=$(_issue_key "$wt_name")
+        [[ -n "$key" ]] && title=$(_issue_title "$key")
+
         if _tmux_session_exists "$tmux_name"; then
             # Get window count
             win_count=$(tmux list-windows -t "=$tmux_name" 2>/dev/null | wc -l | tr -d ' ')
-            echo -e "  ${GREEN}*${NC} ${wt_name}  ${DIM}[$branch]${NC}  ${GREEN}${win_count} windows${NC}"
+            echo -e "  ${GREEN}*${NC} ${wt_name}  ${DIM}[$branch]${NC}  ${GREEN}${win_count} windows${NC}${title:+  ${DIM}${title}${NC}}"
         else
-            echo -e "  ${DIM}-${NC} ${wt_name}  ${DIM}[$branch]  (no tmux)${NC}"
+            echo -e "  ${DIM}-${NC} ${wt_name}  ${DIM}[$branch]  (no tmux)${NC}${title:+  ${DIM}${title}${NC}}"
         fi
     done
     echo ""
