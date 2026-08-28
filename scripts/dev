@@ -7,7 +7,7 @@
 #   dev                     # Start session in current directory
 #   dev <name>              # Create worktree + session, then choose agent
 #   dev -l                  # List sessions (worktree-based, with tmux status)
-#   dev -c <name>           # Clean up session (tmux + worktree + branch)
+#   dev -c <name> [name...] # Clean up session(s) (tmux + worktree + branch)
 #   dev -c --all            # Clean up ALL sessions for current repo
 #   dev -c --orphans        # Clean up sessions without active tmux
 #   DEV_CLEAN_JOBS=8 dev -c --all  # Clean up with up to 8 workers
@@ -25,6 +25,7 @@ NC='\033[0m'
 
 # Defaults
 SESSION_NAME=""
+SESSION_NAMES=()
 LIST_MODE=false
 CLEAN_MODE=false
 CLEAN_ALL=false
@@ -56,7 +57,7 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Options:"
             echo "  -l, --list              List sessions (worktree + tmux status)"
-            echo "  -c, --clean <name>      Clean up session (tmux + worktree + branch)"
+            echo "  -c, --clean <name>...   Clean up session(s) (tmux + worktree + branch)"
             echo "  -c --all                Clean up ALL sessions for current repo"
             echo "  -c --orphans            Clean up sessions without active tmux"
             echo "  -h, --help              Show this help"
@@ -66,6 +67,7 @@ while [[ $# -gt 0 ]]; do
             echo "  dev s1                  # Create worktree + session"
             echo "  dev -l                  # List all sessions"
             echo "  dev -c s1               # Clean up session"
+            echo "  dev -c s1 s2 s3         # Clean up multiple sessions"
             echo "  dev -c --all            # Clean up all sessions"
             echo "  dev -c --orphans        # Clean up orphaned sessions"
             exit 0
@@ -75,11 +77,18 @@ while [[ $# -gt 0 ]]; do
             exit 1
             ;;
         *)
-            SESSION_NAME="$1"
+            SESSION_NAMES+=("$1")
             shift
             ;;
     esac
 done
+
+# Multiple names are only meaningful for clean mode
+if [[ ${#SESSION_NAMES[@]} -gt 1 ]] && [[ "$CLEAN_MODE" != true ]]; then
+    echo -e "${RED}Error: Multiple names are only supported with -c/--clean${NC}"
+    exit 1
+fi
+[[ ${#SESSION_NAMES[@]} -gt 0 ]] && SESSION_NAME="${SESSION_NAMES[0]}"
 
 # Helper: check if tmux session exists
 _tmux_session_exists() {
@@ -392,13 +401,20 @@ if [[ "$CLEAN_MODE" == true ]]; then
         exit 0
     fi
 
-    # Single session clean
-    if [[ -z "$SESSION_NAME" ]]; then
-        echo -e "${RED}Error: Specify session name. Usage: dev -c <name>${NC}"
+    # Named session clean (one or more)
+    if [[ ${#SESSION_NAMES[@]} -eq 0 ]]; then
+        echo -e "${RED}Error: Specify session name(s). Usage: dev -c <name> [name...]${NC}"
         exit 1
     fi
 
-    _clean_session "$SESSION_NAME" "$REPO_ROOT"
+    if [[ ${#SESSION_NAMES[@]} -eq 1 ]]; then
+        _clean_session "${SESSION_NAMES[0]}" "$REPO_ROOT"
+    else
+        if ! _clean_sessions_parallel "$REPO_ROOT" "${SESSION_NAMES[@]}"; then
+            echo -e "${RED}Some sessions failed to clean up.${NC}"
+            exit 1
+        fi
+    fi
     _sync_tmux_snapshot
     echo -e "${GREEN}Done!${NC}"
     exit 0
