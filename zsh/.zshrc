@@ -106,7 +106,13 @@ alias t='turbo'
 alias sb='supabase'
 alias tailscale='/Applications/Tailscale.app/Contents/MacOS/Tailscale'
 alias lg='lazygit'
-alias h='herdr'
+unalias h 2>/dev/null
+h() {
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        git pull --ff-only || return $?
+    fi
+    command herdr "$@"
+}
 
 # Directories
 alias obs='cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/effy'
