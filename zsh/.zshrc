@@ -106,6 +106,7 @@ alias t='turbo'
 alias sb='supabase'
 alias tailscale='/Applications/Tailscale.app/Contents/MacOS/Tailscale'
 alias lg='lazygit'
+alias h='herdr'
 
 # Directories
 alias obs='cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/effy'
