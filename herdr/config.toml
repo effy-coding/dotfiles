@@ -3,3 +3,7 @@ onboarding = false
 [theme]
 name = "vesper"
 auto_switch = false
+
+[keys]
+# Ghostty의 cmd+1..9·cmd+n이 tmux용 ctrl+a 시퀀스를 보내므로 같은 prefix로 맞춘다.
+prefix = "ctrl+a"
