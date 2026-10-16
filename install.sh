@@ -85,6 +85,7 @@ create_symlink "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
 
 # git
 create_symlink "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
+create_symlink "$DOTFILES_DIR/git/ignore" "$HOME/.config/git/ignore"
 
 # ghostty
 create_symlink "$DOTFILES_DIR/ghostty/config" "$HOME/.config/ghostty/config"
