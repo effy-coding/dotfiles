@@ -19,6 +19,10 @@ Git 워크트리를 생성하거나 열면 `hunk diff --watch` 탭을 추가한�
 기기 전용 워크플로가 필요하면 `~/.config/herdr/private-plugins/worktree-hunk/`에
 동일한 플러그인 ID의 로컬 구현을 둔다. 설치 스크립트는 이 경로의 manifest가 있으면 우선 등록한다.
 이 디렉터리는 Git으로 동기화되지 않으므로 새 맥에서는 따로 복원해야 한다.
+기존 개인 플러그인에 `cleanup.py`가 있으면 설치 시 `hooks/cleanup.py`로 연결한다.
+DB 정리는 별도 프로세스로 실행해 삭제 훅이 기다리지 않는다. 결과와 오류는
+`~/.local/state/herdr/plugins/local.worktree-hunk/*.cleanup.log`에 남고,
+실패하면 checkout 등록과 setup 완료 기록을 유지한다. 일반 diff 플러그인에는 DB 삭제 훅을 추가하지 않는다.
 
 Herdr 세션, 터미널 내용과 런타임 상태는 이 저장소에 포함하지 않는다.
 
