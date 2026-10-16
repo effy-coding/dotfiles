@@ -126,7 +126,7 @@ if command -v mise &> /dev/null; then
     echo "==> Installing mise tools (node, bun)..."
     mise install
     mise trust "$HOME/.mise.toml"
-    mise settings set trusted_config_paths "~/workspaces"
+    mise settings add trusted_config_paths "~/workspaces"
 fi
 
 # ------------------------------------------------------------------------------
@@ -149,6 +149,9 @@ fi
 echo "==> Installing custom scripts..."
 mkdir -p "$HOME/.local/bin"
 create_symlink "$DOTFILES_DIR/scripts/dev" "$HOME/.local/bin/dev"
+
+# Herdr config and worktree workflow
+"$DOTFILES_DIR/herdr/install.sh"
 
 # ------------------------------------------------------------------------------
 # 10. Apply macOS settings

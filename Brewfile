@@ -28,12 +28,14 @@ brew "neovim"
 
 # Session Manager
 brew "tmux"
+brew "herdr"
 
 # Version Manager
 brew "mise"
 
 # Python
 brew "uv"
+brew "python"
 
 # Development - React Native / Expo
 brew "watchman"

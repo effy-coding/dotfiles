@@ -1,0 +1,20 @@
+id = "local.worktree-hunk"
+name = "Worktree Hunk"
+version = "0.5.0"
+min_herdr_version = "0.9.5"
+description = "Open a watching Hunk diff tab when a Git worktree opens"
+platforms = ["macos"]
+
+[[events]]
+on = "worktree.created"
+command = ["python3", "ensure_diff.py"]
+
+[[events]]
+on = "worktree.opened"
+command = ["python3", "ensure_diff.py"]
+
+[[panes]]
+id = "diff"
+title = "hunk diff"
+placement = "tab"
+command = ["hunk", "diff", "--watch"]
