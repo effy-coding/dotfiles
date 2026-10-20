@@ -36,6 +36,9 @@ if [[ -f "$HERDR_CONFIG_DIR/private-plugins/worktree-hunk/herdr-plugin.toml" ]];
     if [[ -f "$HERDR_PLUGIN_DIR/cleanup.py" ]]; then
         link_config "$HERDR_DOTFILES_DIR/hooks/cleanup.py" "$HERDR_PLUGIN_DIR/cleanup.py"
     fi
+    if [[ -f "$HERDR_PLUGIN_DIR/bootstrap.py" ]]; then
+        link_config "$HERDR_DOTFILES_DIR/hooks/bootstrap.py" "$HERDR_PLUGIN_DIR/bootstrap.py"
+    fi
 fi
 herdr plugin link "$HERDR_PLUGIN_DIR"
 echo "Herdr config and worktree workflow linked."
