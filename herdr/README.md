@@ -22,9 +22,8 @@ Git 워크트리를 생성하거나 열면 `hunk diff --watch` 탭을 추가한�
 기존 개인 플러그인에 `cleanup.py`가 있으면 설치 시 `hooks/cleanup.py`로 연결한다.
 `bootstrap.py`가 있으면 `hooks/bootstrap.py`로 연결하며, Melting 워크트리는
 `bun install`과 `bun run db:local:start`로 준비한다. 기존 DB는 초기화하지 않는다.
-DB 정리는 별도 프로세스로 실행해 삭제 훅이 기다리지 않는다. 결과와 오류는
-`~/.local/state/herdr/plugins/local.worktree-hunk/*.cleanup.log`에 남고,
-실패하면 checkout 등록과 setup 완료 기록을 유지한다. 일반 diff 플러그인에는 DB 삭제 훅을 추가하지 않는다.
+워크트리를 삭제하면 checkout 등록과 setup 완료 기록만 지워 같은 경로로 다시 만들 때 준비를 다시 한다.
+닫힌 워크트리의 네이티브 로컬 DB는 다음 `db:local:start`가 정리한다. 일반 diff 플러그인에는 삭제 훅을 추가하지 않는다.
 
 Herdr 세션, 터미널 내용과 런타임 상태는 이 저장소에 포함하지 않는다.
 
