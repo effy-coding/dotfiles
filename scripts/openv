@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# openv — `op run` 드롭인 대체.
+#
+# op의 Touch ID 승인은 시간이 아니라 호출 프로세스(터미널 세션) 단위로 캐시된다.
+# 에이전트처럼 명령마다 새 셸을 띄우면 매번 지문을 요구하므로,
+# env-file 해석 결과를 TTL 동안 로컬에 캐시해 재사용한다.
+#
+# 사용: openv --env-file=env/dev.env -- bun run foo.ts
+#      openv --env-file=a.env --env-file=b.env --ttl=1800 -- cmd
+#      openv --refresh --env-file=a.env -- cmd     # 캐시 무시하고 다시 해석
+set -euo pipefail
+
+TTL="${OPENV_TTL:-21600}"
+CACHE_DIR="${OPENV_CACHE_DIR:-$HOME/.cache/op-env}"
+refresh=""
+env_files=()
+op_args=()
+
+while (($#)); do
+  case "$1" in
+    --env-file=*) env_files+=("${1#--env-file=}"); op_args+=("$1"); shift ;;
+    --env-file)   env_files+=("$2"); op_args+=("$1" "$2"); shift 2 ;;
+    --ttl=*)      TTL="${1#--ttl=}"; shift ;;
+    --refresh)    refresh=1; shift ;;
+    --)           shift; break ;;
+    *)            break ;;
+  esac
+done
+
+((${#env_files[@]})) || { echo "usage: openv --env-file=FILE [--env-file=FILE2] [--ttl=SEC] [--refresh] -- CMD" >&2; exit 2; }
+(($#)) || { echo "openv: 실행할 명령이 없습니다" >&2; exit 2; }
+
+mkdir -p "$CACHE_DIR"
+chmod 700 "$CACHE_DIR"
+# TTL이 지난 캐시는 쓰이지 않더라도 지워서 평문 secret이 오래 남지 않게 한다.
+find "$CACHE_DIR" -type f -name '*.env' -mmin "+$((TTL / 60))" -delete 2>/dev/null || true
+
+# 캐시 키 = env-file 내용 해시(경로 무관). env-file은 op:// 참조만 담은 git 추적 파일이라
+# 워크트리마다 경로가 달라도 내용이 같으면 같은 secret으로 해석된다 → 캐시를 공유해야 한다.
+sig=""
+for f in "${env_files[@]}"; do
+  [[ -f $f ]] || { echo "openv: env-file 없음: $f" >&2; exit 2; }
+  # 운영 secret은 디스크에 캐시하지 않는다. 우회 플래그를 두지 않고 여기서 끊는다.
+  if [[ $(basename "$f") == *prod* ]]; then
+    echo "openv: prod env-file은 캐시하지 않습니다: $f" >&2
+    echo "       'op run' 을 그대로 사용하세요." >&2
+    exit 3
+  fi
+  sig+="$(shasum -a 256 < "$f")"$'\n'
+done
+cache="$CACHE_DIR/$(printf '%s' "$sig" | shasum -a 256 | cut -c1-32).env"
+
+if [[ -n $refresh || ! -f $cache ]]; then
+  keys=$(sed -nE 's/^[[:space:]]*(export[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*)=.*/\2/p' "${env_files[@]}" | sort -u)
+  [[ -n $keys ]] || { echo "openv: env-file에서 변수를 찾지 못했습니다" >&2; exit 2; }
+  umask 077
+  # --no-masking 없이는 op run이 자식 stdout의 secret을 <concealed>로 치환해 캐시가 깨진다.
+  op run --no-masking "${op_args[@]}" -- bash -c '
+    for k in "$@"; do
+      if v=$(printenv "$k"); then printf "export %s=%q\n" "$k" "$v"; fi
+    done
+  ' _ $keys > "$cache.tmp"
+  mv "$cache.tmp" "$cache"
+fi
+
+# shellcheck disable=SC1090
+. "$cache"
+exec "$@"

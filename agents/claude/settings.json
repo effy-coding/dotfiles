@@ -1,0 +1,66 @@
+{
+  "model": "fable",
+  "effortLevel": "high",
+  "tui": "fullscreen",
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "WebSearch",
+      "WebFetch",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(wc:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git diff:*)",
+      "Bash(git push:*)",
+      "Bash(git rm:*)",
+      "Bash(gh pr:*)",
+      "Bash(bun run:*)",
+      "Bash(bun test:*)",
+      "Bash(bun check:*)",
+      "Bash(bun x psql:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx turbo:*)",
+      "Bash(turbo run:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm root:*)",
+      "Bash(linear issue:*)",
+      "Bash(linear view:*)",
+      "Bash(wrangler deployments:*)",
+      "Bash(wrangler tail:*)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d \"$HOME/claude-skills/.git\" ] && git -C \"$HOME/claude-skills\" pull --quiet --ff-only >/dev/null 2>&1 &"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "/usr/bin/python3 \"$HOME/.claude/statusline.py\""
+  },
+  "enabledPlugins": {
+    "intercom@claude-plugins-official": true,
+    "slack@claude-plugins-official": true,
+    "linear-cli@linear-cli": true,
+    "typesafe@typesafe-ai": true
+  },
+  "extraKnownMarketplaces": {
+    "linear-cli": { "source": { "source": "github", "repo": "schpet/linear-cli" } },
+    "typesafe-ai": { "source": { "source": "github", "repo": "typesafe-ai/skills" } }
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "agentPushNotifEnabled": true
+}

@@ -154,6 +154,9 @@ create_symlink "$DOTFILES_DIR/scripts/dev" "$HOME/.local/bin/dev"
 # Herdr config and worktree workflow
 "$DOTFILES_DIR/herdr/install.sh"
 
+# Claude Code / Codex: 전역 지침·설정 템플릿·openv
+"$DOTFILES_DIR/agents/install.sh"
+
 # ------------------------------------------------------------------------------
 # 10. Apply macOS settings
 # ------------------------------------------------------------------------------

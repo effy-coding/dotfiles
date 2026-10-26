@@ -1,0 +1,17 @@
+model = "gpt-6.1-sol"
+model_reasoning_effort = "low"
+
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+service_tier = "fast"
+
+[tui]
+theme = "sublime-snazzy"
+whimsy = false
+screen_reader_detection_done = true
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
+
+[notice]
+hide_rate_limit_model_nudge = true
