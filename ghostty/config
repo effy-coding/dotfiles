@@ -91,3 +91,11 @@ keybind = super+shift+f=text:\x1df
 
 # Cmd+N: New tmux window
 keybind = super+n=text:\x01c
+
+# ------------------------------------------------------------------------------
+# Background image (PNG/JPEG only; webp from Downloads converted via sips)
+# ------------------------------------------------------------------------------
+background-image = ~/.config/ghostty/background.png
+background-image-opacity = 0.25
+background-image-fit = cover
+background-image-position = center
