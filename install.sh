@@ -82,6 +82,7 @@ create_symlink() {
 
 # zsh
 create_symlink "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+create_symlink "$DOTFILES_DIR/zsh/.zprofile" "$HOME/.zprofile"
 
 # git
 create_symlink "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
