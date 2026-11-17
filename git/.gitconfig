@@ -4,6 +4,7 @@
 
 [alias]
 	s = status
+	p = pull
 	c = checkout
 	nuke = !git reset --hard && git clean -fd
 
