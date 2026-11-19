@@ -138,3 +138,5 @@ if [ -f '/Users/effy/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/effy/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/effy/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+export OPENV_TTL=2592000  # openv 캐시 30일
+export OP_SERVICE_ACCOUNT_TOKEN="$(security find-generic-password -a "$USER" -s op-sa-melting-dev -w 2>/dev/null)"
