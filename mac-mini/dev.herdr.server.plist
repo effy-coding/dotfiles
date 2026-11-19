@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>dev.herdr.server</string>
+  <!-- remote-client-bridge는 서버가 없으면 detached daemon으로 띄우고, stdin이 닫혀 있으면 바로 종료한다.
+       herdr server를 직접 띄우면 detached_server_daemon 표시가 없어 사이드바 점검에 실패한다. -->
+  <key>ProgramArguments</key>
+  <array><string>$HOME/.local/bin/herdr</string><string>remote-client-bridge</string></array>
+  <key>StandardInPath</key><string>/dev/null</string>
+  <key>EnvironmentVariables</key>
+  <dict><key>PATH</key><string>$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string></dict>
+  <key>WorkingDirectory</key><string>$HOME</string>
+  <key>RunAtLoad</key><true/>
+  <key>StartInterval</key><integer>300</integer>
+  <key>StandardOutPath</key><string>$HOME/Library/Logs/herdr-server.launchd.log</string>
+  <key>StandardErrorPath</key><string>$HOME/Library/Logs/herdr-server.launchd.log</string>
+</dict>
+</plist>
