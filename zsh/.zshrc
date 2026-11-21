@@ -114,7 +114,21 @@ _herdr_pull() {
 }
 # h: 기본 세션(평소 작업), hy: 유튜브 촬영용 별도 세션
 h()  { _herdr_pull && command herdr "$@"; }
-hy() { _herdr_pull && command herdr --session youtube "$@"; }
+# herdr는 machine 목록(state/herdr/client)을 세션과 무관하게 공유한다.
+# hy는 client/만 비운 별도 state를 써서 mini 같은 원격 machine이 안 뜨게 하고,
+# 플러그인·agent 감지 상태는 원본을 심링크로 공유한다.
+_HY_STATE="$HOME/.local/state/herdr-youtube"
+hy() {
+    _herdr_pull || return $?
+    local src="${XDG_STATE_HOME:-$HOME/.local/state}/herdr" dst="$_HY_STATE/herdr" d
+    mkdir -p "$dst/client"
+    for d in agent-detection plugins client-shell; do
+        [[ -e "$dst/$d" ]] || ln -s "$src/$d" "$dst/$d"
+    done
+    XDG_STATE_HOME="$_HY_STATE" command herdr --session youtube "$@"
+}
+# hy로 띄운 서버의 pane 셸에 바뀐 XDG_STATE_HOME이 새지 않게 한다.
+[[ "$XDG_STATE_HOME" == "$_HY_STATE" ]] && unset XDG_STATE_HOME
 
 # Directories
 alias obs='cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/effy'
