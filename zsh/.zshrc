@@ -106,13 +106,15 @@ alias t='turbo'
 alias sb='supabase'
 alias tailscale='/Applications/Tailscale.app/Contents/MacOS/Tailscale'
 alias lg='lazygit'
-unalias h 2>/dev/null
-h() {
+unalias h hy 2>/dev/null
+_herdr_pull() {
     if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
         git pull --ff-only || return $?
     fi
-    command herdr "$@"
 }
+# h: 기본 세션(평소 작업), hy: 유튜브 촬영용 별도 세션
+h()  { _herdr_pull && command herdr "$@"; }
+hy() { _herdr_pull && command herdr --session youtube "$@"; }
 
 # Directories
 alias obs='cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/effy'
